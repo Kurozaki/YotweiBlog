@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <link rel="stylesheet" href="../static/css/yot-nav.css">
+    <link rel="stylesheet" href="../static/css/font-awesome.css">
+    <link rel="stylesheet" href="../static/css/animate.css">
+    <script src="../static/js/jquery-3.2.1.min.js"></script>
+
+    <style>
+        body {
+            overflow-y: scroll;
+            margin: 0;
+            background-color: #f1f1f1;
+            min-width: 1280px;
+        }
+
+        span {
+            display: block;
+        }
+
+        h1 {
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        h3{
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+    </style>
+
+    <script>
+        $(window).ready(function () {
+            $('#nav-space-fill').css('height', $('#nav-box').height());
+        });
+
+        $(window).scroll(function (e) {
+            if ($(document).scrollTop() > 160) {
+                $('#nav-box').removeClass('slideInDown').addClass('slideOutUp').addClass('animated');
+            } else {
+                $('#nav-box').removeClass('slideOutUp').addClass('slideInDown');
+            }
+
+            $('#nav-box').css('left', -$(document).scrollLeft())
+        });
+
+        var ableAnime = true;
+
+        $(window).click(function () {
+            if (!ableAnime) {
+                return;
+            }
+            ableAnime = false;
+            $('h3').addClass('bounce').addClass('animated');
+            $('h1').addClass('bounce').addClass('animated');
+            setTimeout(function () {
+                ableAnime = true;
+                $('h1').removeClass();
+                $('h3').removeClass();
+            }, 1000)
+        });
+    </script>
+</head>
+
+<body>
+<div id="nav-box">
+    <div id="top-nav">
+        <div id="nav-left">
+            <img src="../static/images/yotwei.png">
+        </div>
+        <div id="nav-right">
+            <div class="nav-item">
+                <i class="fa fa-home"></i>
+                <strong>首页</strong>
+            </div>
+
+            <div class="nav-item">
+                <i class="fa fa-newspaper-o"></i>
+                <strong>全部文章</strong>
+            </div>
+            <div class="nav-item nav-item-act">
+                <i class="fa fa-sticky-note-o"></i>
+                <strong>留言板</strong>
+            </div>
+            <i id="search-button" class="fa fa-search"></i>
+        </div>
+
+    </div>
+</div>
+<div id="nav-space-fill">
+</div>
+
+<div id="content-box">
+    <!--main content-->
+    <div class="flipInY animated" style="text-align: center">
+        <h3 style="font-weight: normal">留言板还没完成~</h3>
+        <h1 style="font-weight: normal">敬请期待 :)</h1>
+    </div>
+</div>
+
+</body>
+</html>

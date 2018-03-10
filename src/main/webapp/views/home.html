@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <link rel="stylesheet" href="../static/css/yot-nav.css">
+    <link rel="stylesheet" href="../static/css/yot-style.css">
+
+    <link rel="stylesheet" href="../static/css/font-awesome.css">
+    <link rel="stylesheet" href="../static/css/animate.css">
+    <script src="../static/js/jquery-3.2.1.min.js"></script>
+    <script src="../static/js/functions.js"></script>
+
+    <style>
+        body {
+            overflow-y: scroll;
+            margin: 0;
+            background-color: #f1f1f1;
+            min-width: 1280px;
+        }
+
+        #left-box {
+            width: 840px;
+            float: left;
+        }
+
+        #right-box {
+            float: right;
+            display: inline-block;
+        }
+
+        #personal-info-box {
+            width: 264px;
+            /*display: none;*/
+        }
+
+        #avatar {
+            border-radius: 50%;
+            width: 64px;
+            height: 64px;
+        }
+
+        #friendly-link-box {
+            /*display: none;*/
+            margin-top: 4px;
+            width: 264px;
+        }
+
+        #tool-list-box {
+            /*display: none;*/
+            margin-top: 12px;
+            /*float: right;*/
+            width: 264px;
+        }
+
+        #nickname {
+            display: block;
+            font-size: small;
+            font-weight: bold;
+        }
+
+        #motto {
+            display: block;
+            font-size: small;
+            color: GrayText;
+        }
+
+        .tool-item {
+            transition-property: background-color, font-weight;
+            transition-duration: 200ms;
+            padding: 8px;
+        }
+
+        .tool-item > img {
+            vertical-align: middle;
+            width: 2em;
+            height: 2em;
+        }
+
+        .tool-item > label {
+            color: GrayText;
+            vertical-align: middle;
+            margin-left: 0.5em;
+            font-size: small;
+        }
+
+        .tool-item:hover {
+            background-color: #f1f1f1;
+        }
+
+        .tool-item:hover > label {
+            font-weight: bolder;
+        }
+
+        .friendly-item {
+            padding: 16px 0;
+            display: inline-block;
+            width: 28%;
+            text-align: center;
+        }
+
+        .friendly-item > span {
+            border-radius: 30%;
+            width: 1.2em;
+            height: 1.2em;
+            background: cornflowerblue;
+            color: white;
+        }
+
+        .article-preview-item {
+            margin-bottom: 8px;
+            position: relative;
+            padding: 1.2em;
+        }
+
+        .article-preview-item-img {
+            width: 192px;
+            height: 128px;
+        }
+
+        .article-preview-item-infos {
+            width: 580px;
+            margin-left: 1em;
+            vertical-align: top;
+            display: inline-block;
+        }
+
+        .article-preview-item-title {
+            display: block;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            max-width: 20em;
+            overflow-x: hidden;
+            font-weight: bolder;
+        }
+
+        .article-preview-item-intro {
+            max-height: 3em;
+            text-indent: 2em;
+            overflow-y: hidden;
+            font-size: small;
+            color: darkgray;
+        }
+
+        .article-preview-item-read-btn {
+            transition-property: background-color;
+            transition-duration: 200ms;
+            right: 0;
+            bottom: 1.6em;
+            position: absolute;
+            font-size: small;
+            margin-left: 1em;
+            padding: 4px 12px;
+            border: none;
+            color: white;
+            background-color: cornflowerblue;
+        }
+
+        .article-preview-item-read-btn:hover {
+            background-color: GrayText;
+        }
+
+        .article-preview-item-date {
+            position: absolute;
+            bottom: 1.7em;
+            color: GrayText;
+            font-size: small;
+            left: 16.4em;
+        }
+
+        .article-preview-item-read-count {
+            position: absolute;
+            bottom: 1.8em;
+            color: GrayText;
+            font-size: small;
+            left: 24em;
+        }
+
+        .article-preview-item-mark {
+            background-color: red;
+            color: white;
+            position: absolute;
+            padding: 2px 6px;
+            left: 0;
+            top: 1.2em;
+        }
+    </style>
+
+    <script>
+
+        $(window).ready(function () {
+            $('#nav-space-fill').css('height', $('#nav-box').height());
+            $('.article-preview-item-img').hover(function () {
+                $(this).addClass('pulse').addClass('animated')
+                    .one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend',
+                        function () {
+                            $(this).removeClass('pulse').removeClass('animated');
+                        });
+            });
+
+            //load preview list
+            $.get(api_url('/article/preview/list?len=5'), function (retData) {
+                if (retData.code == 200) {
+                    retData.data.forEach(function (item) {
+                        article_list_add_item(item);
+                    });
+                }
+            });
+
+        });
+
+        $(window).scroll(function () {
+            var navbox = $('#nav-box');
+            if ($(document).scrollTop() > 160) {
+                navbox.removeClass('slideInDown').addClass('slideOutUp').addClass('animated');
+            } else {
+                navbox.removeClass('slideOutUp').addClass('slideInDown');
+            }
+            navbox.css('left', -$(document).scrollLeft())
+        });
+
+        function article_list_add_item(item) {
+            $('#article-list-box').append(
+                $('<div class="article-preview-item yot-box flipInX animated">')
+                    .append($('<img class="article-preview-item-img">')
+                        .attr('src', item.coverUrl)
+                        .hover(function () {
+                            $(this).addClass('pulse').addClass('animated')
+                                .one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend',
+                                    function () {
+                                        $(this).removeClass('pulse').removeClass('animated');
+                                    });
+                        })
+                    )
+                    .append($('<span class="article-preview-item-mark">').text('原创'))
+                    .append($('<div class="article-preview-item-infos">')
+                        .append($('<label class="article-preview-item-title">').text(item.title))
+                        .append($('<p class="article-preview-item-intro">').text(item.intro))
+                    )
+                    .append($('<span class="article-preview-item-date">')
+                        .text(date_format(item.createTime, 'y年m月d日'))
+                    )
+                    .append($('<span class="article-preview-item-read-count fa fa-eye">')
+                        .text(' ' + item.readCount)
+                    )
+                    .append($('<button class="article-preview-item-read-btn">')
+                        .text('阅读全文')
+                        .click('')
+                    )
+            );
+        }
+
+    </script>
+</head>
+
+<body>
+<div id="nav-box">
+    <div id="top-nav">
+        <div id="nav-left">
+            <img src="../static/images/yotwei.png">
+        </div>
+        <div id="nav-right">
+            <div class="nav-item nav-item-act">
+                <i class="fa fa-home"></i>
+                <strong>首页</strong>
+            </div>
+
+            <div class="nav-item">
+                <i class="fa fa-newspaper-o"></i>
+                <strong>全部文章</strong>
+            </div>
+            <div class="nav-item">
+                <i class="fa fa-sticky-note-o"></i>
+                <strong>留言板</strong>
+            </div>
+            <i id="search-button" class="fa fa-search"></i>
+        </div>
+
+    </div>
+</div>
+<div id="nav-space-fill">
+</div>
+
+<div id="content-box">
+    <!--article list-->
+    <div id="left-box">
+        <div id="article-list-box">
+        </div>
+    </div>
+
+    <div id="right-box">
+        <!--personal info-->
+        <div id="personal-info-box" class="yot-box flipInY animated">
+        <span class="module-sub-title">
+            <span class="fa fa-th-list"></span>
+            <label>博主</label>
+        </span>
+            <div style="margin: 12px">
+                <img id="avatar"
+                     src="https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=3151873896,1759627050&fm=27&gp=0.jpg">
+                <div style="display: inline-block; vertical-align: top; margin-left: 4px">
+                    <label id="nickname">
+                        Yotwei
+                    </label>
+                    <label>
+                    </label>
+                    <label id="motto">
+                        Hello
+                    </label>
+                </div>
+
+            </div>
+            <div style="padding: 12px; border-top: 1px solid #eeeeee">
+            <span style="display: inline-block; color: gray">
+                <label style="font-size: small;">文章</label>
+                <label style="font-size: larger; margin-left: 0.2em; color: cornflowerblue; font-weight: bold">10</label>
+            </span>
+
+                <span style="display: inline-block; color: gray; margin-left: 2em">
+                <label style="font-size: small">阅读</label>
+                <label style="font-size: larger; margin-left: 0.2em; color: cornflowerblue; font-weight: bold">776
+                </label>
+            </span>
+            </div>
+        </div>
+
+        <div id="friendly-link-box" class="yot-box flipInY animated">
+            <div class="module-sub-title">
+                <span class="fa fa-th-list"></span>
+                <label>相关</label>
+            </div>
+
+            <div style="text-align: center">
+                <div class="friendly-item">
+                    <span class="fa fa-2x fa-commenting"></span>
+                </div>
+
+                <div class="friendly-item">
+                    <span class="fa fa-2x fa-wechat"></span>
+                </div>
+
+                <div class="friendly-item">
+                    <span class="fa fa-2x fa-github"></span>
+                </div>
+            </div>
+        </div>
+
+        <div id="tool-list-box" class="yot-box flipInY animated">
+            <div class="module-sub-title">
+                <span class="fa fa-th-list"></span>
+                <label>常用工具</label>
+            </div>
+
+            <div id="tool-list">
+                <div class="tool-item">
+                    <img src="http://www.atool.org/res/regex_files/regexpal.gif">
+                    <label>Regexpal</label>
+                </div>
+
+                <div class="tool-item">
+                    <img src="http://www.atool.org/res/regex_files/regexpal.gif">
+                    <label>Regexpal</label>
+                </div>
+                <div class="tool-item">
+                    <img src="http://www.atool.org/res/regex_files/regexpal.gif">
+                    <label>Regexpal</label>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

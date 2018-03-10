@@ -1,0 +1,23 @@
+.yot-box {
+    border: 1px solid #ddd;
+    background-color: white;
+}
+
+.module-sub-title {
+    border-bottom: 1px solid #dddddd;
+    display: block;
+    padding: 8px 12px;
+}
+
+.module-sub-title > span {
+    color: GrayText;
+    vertical-align: middle;
+}
+
+.module-sub-title > label {
+    margin-left: 0.5em;
+    color: GrayText;
+    font-weight: bold;
+    vertical-align: middle;
+    font-size: small;
+}

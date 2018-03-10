@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yotwei.blog.dao.ArticleDAO">
+
+    <select id="getArticlePreviewList" resultType="com.yotwei.blog.enity.Article">
+        SELECT id, title, intro, create_time, article_type, read_count, cover_url
+        FROM wb_article
+        LIMIT #{offset}, #{length};
+    </select>
+</mapper>

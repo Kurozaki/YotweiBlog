@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>文章标题</title>
+
+    <link rel="stylesheet" href="../static/css/yot-nav.css">
+    <link rel="stylesheet" href="../static/css/yot-style.css">
+    <link rel="stylesheet" href="../static/css/font-awesome.css">
+    <link rel="stylesheet" href="../static/css/animate.css">
+    <script src="../static/js/jquery-3.2.1.min.js"></script>
+
+    <style>
+        body {
+            overflow-y: scroll;
+            margin: 0;
+            background-color: #f1f1f1;
+            min-width: 1280px;
+        }
+
+        #left-box {
+            transition-property: width;
+            transition-duration: 300ms;
+            float: left;
+            width: 840px;
+        }
+
+        #right-box {
+            width: 264px;
+            float: right;
+        }
+
+        #article-content {
+            padding: 12px;
+            font-size: small;
+            border-top: 1px solid #eeeeee;
+        }
+
+        #article-title {
+            font-weight: bolder;
+        }
+
+        #article-info-box {
+            text-align: center;
+        }
+
+        #article-detail-box {
+            position: relative;
+        }
+
+        #article-date {
+            color: GrayText;
+            font-size: small;
+        }
+
+        #article-read-count {
+            margin-left: 2em;
+            color: GrayText;
+            font-size: small;
+        }
+
+        #article-top-bar {
+            min-height: 1.2em;
+            padding: 12px 18px 0 18px;
+        }
+
+        #article-top-bar > span {
+            transition-property: background-color;
+            transition-duration: 200ms;
+            border-radius: 1px;
+            padding: 4px;
+            font-size: small;
+            border: 1px solid darkgray;
+            color: GrayText;
+        }
+
+        #article-top-bar > span:hover {
+            cursor: pointer;
+            color: white;
+            background-color: darkgray;
+        }
+
+        #article-tags {
+            color: darkgray;
+            font-size: small;
+            padding: 8px;
+            background-color: whitesmoke;
+        }
+
+        .tag-item {
+            transition: 200ms;
+            vertical-align: bottom;
+            margin-left: 2px;
+            border-radius: 2px;
+            color: gray;
+            border: 1px solid #aaaaaa;
+            padding: 0 4px;
+        }
+
+        .tag-item:hover {
+            color: white;
+            cursor: pointer;
+            background-color: gray;
+        }
+    </style>
+
+    <script>
+        $(window).ready(function () {
+            $('#nav-space-fill').css('height', $('#nav-box').height());
+        });
+
+        $(window).scroll(function (e) {
+            if ($(document).scrollTop() > 160) {
+                $('#nav-box').removeClass('slideInDown').addClass('slideOutUp').addClass('animated');
+            } else {
+                $('#nav-box').removeClass('slideOutUp').addClass('slideInDown');
+            }
+
+            $('#nav-box').css('left', -$(document).scrollLeft())
+        });
+
+        function spread_article() {
+            $('#right-box').hide();
+            $('#left-box').css('width', '100%');
+            $('#btn-shrink').show();
+            $('#btn-spread').hide();
+        }
+
+        function shrink_article() {
+            $('#left-box').css('width', '840px');
+            $('#btn-shrink').hide();
+            $('#btn-spread').show();
+            setTimeout(function () {
+                $('#right-box').fadeIn();
+            },300);
+        }
+    </script>
+</head>
+
+<body>
+<div id="nav-box">
+    <div id="top-nav">
+        <div id="nav-left">
+            <img src="../static/images/yotwei.png">
+        </div>
+        <div id="nav-right">
+            <div class="nav-item">
+                <i class="fa fa-home"></i>
+                <strong>首页</strong>
+            </div>
+
+            <div class="nav-item">
+                <i class="fa fa-newspaper-o"></i>
+                <strong>全部文章</strong>
+            </div>
+            <div class="nav-item">
+                <i class="fa fa-sticky-note-o"></i>
+                <strong>留言板</strong>
+            </div>
+            <i id="search-button" class="fa fa-search"></i>
+        </div>
+
+    </div>
+</div>
+<div id="nav-space-fill">
+</div>
+
+<div id="content-box">
+    <div id="left-box">
+        <div id="article-detail-box" class="yot-box">
+            <div id="article-info-box">
+                <div id="article-top-bar">
+                    <span style="float: left" class="fa fa-hand-o-left"> 返回</span>
+                    <span id="btn-spread" style="float: right;"
+                          class="fa fa-align-right" onclick="spread_article()"> 展开</span>
+                    <span id="btn-shrink" style="float: right; display: none"
+                          class="fa fa-align-left" onclick="shrink_article()"> 收起</span>
+                </div>
+                <h3 id="article-title">[文章标题]</h3>
+                <div style="margin-bottom: 8px">
+                    <span id="article-date" class="fa fa-calendar"> 2017年3月2日</span>
+                    <span id="article-read-count" class="fa fa-eye"> 2236</span>
+                </div>
+            </div>
+            <div id="article-content">
+                [Firefox 从 57 版本开始将全面启用 WebExtensions 拓展，传统 XUL 拓展将不被支持，这个决定有利有弊，弊在于拓展功能性降低，利在于 WebExtensions
+                拓展支持多进程，浏览速度将更加快速流畅，在跨浏览器拓展开发将更容易被移植，WebExtensions 拓展将是未来发展的方向，后续Firefox官方将会提供更多的API，Firefox
+                拓展也将比其他浏览器的拓展更加强大，更加Firefox。]
+            </div>
+            <div id="article-tags">
+                <span>所属分类:</span>
+                <span class="tag-item">Java</span>
+                <span class="tag-item">Http</span>
+                <span class="tag-item">密码学</span>
+            </div>
+        </div>
+    </div>
+    <div id="right-box">
+        <div style="padding: 8px; background-color: lightskyblue">
+            [right]
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
