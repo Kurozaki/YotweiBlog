@@ -7,4 +7,27 @@
         FROM wb_article
         LIMIT #{offset}, #{length};
     </select>
+
+    <select id="getArticlePreviewListByTagId" resultType="com.yotwei.blog.enity.Article">
+        SELECT id, title, intro, create_time, article_type, read_count, cover_url
+        FROM wb_article
+        WHERE id IN (SELECT article_id FROM rel_article_tag WHERE tag_id = #{tagId})
+        LIMIT #{offset}, #{length};
+    </select>
+
+    <select id="getArticleById" resultType="com.yotwei.blog.enity.Article">
+        SELECT * FROM wb_article WHERE id = #{articleId};
+    </select>
+
+    <select id="getArticleRecommendList" resultType="com.yotwei.blog.dto.ArticleRecommend">
+        SELECT id, title, cover_url FROM wb_article LIMIT 5;
+    </select>
+
+    <select id="admGetArticleList" resultType="Map">
+        SELECT id, title FROM wb_article;
+    </select>
+
+    <select id="getArticleStatisInfo" resultType="Map">
+        SELECT COUNT(*) as articleCount, SUM(read_count) as totalReadCount FROM wb_article;
+    </select>
 </mapper>

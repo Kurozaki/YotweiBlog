@@ -16,3 +16,9 @@ function random_integer(range) {
 function api_url(url) {
     return 'http://localhost' + url;
 }
+
+function get_url_param(name) {
+    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+    var r = window.location.search.substr(1).match(reg);
+    if (r != null) return unescape(r[2]); return null;
+}

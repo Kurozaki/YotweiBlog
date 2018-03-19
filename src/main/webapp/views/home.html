@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Yotwei博客 | 首页</title>
 
     <link rel="stylesheet" href="../static/css/yot-nav.css">
     <link rel="stylesheet" href="../static/css/yot-style.css">
@@ -14,9 +14,11 @@
 
     <style>
         body {
+            background: url("../static/images/bj.png");
+            background-repeat: repeat;
+            background-attachment: fixed;
             overflow-y: scroll;
             margin: 0;
-            background-color: #f1f1f1;
             min-width: 1280px;
         }
 
@@ -114,6 +116,10 @@
             padding: 1.2em;
         }
 
+        .article-preview-item:hover {
+            cursor: default;
+        }
+
         .article-preview-item-img {
             width: 192px;
             height: 128px;
@@ -133,6 +139,10 @@
             max-width: 20em;
             overflow-x: hidden;
             font-weight: bolder;
+        }
+
+        .article-preview-item-title:hover {
+            color: cadetblue;
         }
 
         .article-preview-item-intro {
@@ -158,6 +168,7 @@
         }
 
         .article-preview-item-read-btn:hover {
+            cursor: pointer;
             background-color: GrayText;
         }
 
@@ -174,7 +185,7 @@
             bottom: 1.8em;
             color: GrayText;
             font-size: small;
-            left: 24em;
+            left: 26em;
         }
 
         .article-preview-item-mark {
@@ -188,7 +199,6 @@
     </style>
 
     <script>
-
         $(window).ready(function () {
             $('#nav-space-fill').css('height', $('#nav-box').height());
             $('.article-preview-item-img').hover(function () {
@@ -208,6 +218,11 @@
                 }
             });
 
+            //load article statis info
+            $.get(api_url('/article/statis'), function (retData) {
+                $('#article-total-count').text(retData.data.articleCount);
+                $('#article-total-read-count').text(retData.data.totalReadCount);
+            })
         });
 
         $(window).scroll(function () {
@@ -235,8 +250,14 @@
                     )
                     .append($('<span class="article-preview-item-mark">').text('原创'))
                     .append($('<div class="article-preview-item-infos">')
-                        .append($('<label class="article-preview-item-title">').text(item.title))
-                        .append($('<p class="article-preview-item-intro">').text(item.intro))
+                        .append($('<label class="article-preview-item-title">')
+                            .text(item.title)
+                            .click(function () {
+                                window.location.href = 'article-detail.html?id=' + item.id;
+                            })
+                        )
+                        .append($('<p class="article-preview-item-intro">')
+                            .text(item.intro))
                     )
                     .append($('<span class="article-preview-item-date">')
                         .text(date_format(item.createTime, 'y年m月d日'))
@@ -246,7 +267,9 @@
                     )
                     .append($('<button class="article-preview-item-read-btn">')
                         .text('阅读全文')
-                        .click('')
+                        .click(function () {
+                            window.location.href = 'article-detail.html?id=' + item.id;
+                        })
                     )
             );
         }
@@ -266,11 +289,11 @@
                 <strong>首页</strong>
             </div>
 
-            <div class="nav-item">
+            <div class="nav-item" onclick="window.location.href='articles.html'">
                 <i class="fa fa-newspaper-o"></i>
                 <strong>全部文章</strong>
             </div>
-            <div class="nav-item">
+            <div class="nav-item" onclick="window.location.href='guestmsg.html'">
                 <i class="fa fa-sticky-note-o"></i>
                 <strong>留言板</strong>
             </div>
@@ -314,12 +337,14 @@
             <div style="padding: 12px; border-top: 1px solid #eeeeee">
             <span style="display: inline-block; color: gray">
                 <label style="font-size: small;">文章</label>
-                <label style="font-size: larger; margin-left: 0.2em; color: cornflowerblue; font-weight: bold">10</label>
+                <label id="article-total-count"
+                       style="font-size: larger; margin-left: 0.2em; color: cornflowerblue; font-weight: bold">0</label>
             </span>
 
                 <span style="display: inline-block; color: gray; margin-left: 2em">
                 <label style="font-size: small">阅读</label>
-                <label style="font-size: larger; margin-left: 0.2em; color: cornflowerblue; font-weight: bold">776
+                <label id="article-total-read-count"
+                       style="font-size: larger; margin-left: 0.2em; color: cornflowerblue; font-weight: bold">0
                 </label>
             </span>
             </div>

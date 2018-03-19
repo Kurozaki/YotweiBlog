@@ -15,4 +15,16 @@
         SELECT * FROM wb_tags;
     </select>
 
+    <select id="findRecordByTagId" resultType="Map">
+        SELECT * FROM rel_article_tag WHERE tag_id = #{id} LIMIT 1;
+    </select>
+
+    <insert id="addTag" useGeneratedKeys="true" keyProperty="id" parameterType="com.yotwei.blog.enity.Tag">
+        INSERT INTO wb_tags VALUES (NULL ,#{name});
+    </insert>
+
+    <delete id="deleteTag">
+        DELETE FROM wb_tags WHERE id = #{delId};
+    </delete>
+    <!---->
 </mapper>

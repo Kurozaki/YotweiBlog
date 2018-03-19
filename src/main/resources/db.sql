@@ -31,6 +31,12 @@ CREATE TABLE wb_guest_msg(
 ) ENGINE=InnoDB, DEFAULT charset=utf8;
 
 
+CREATE TABLE wb_admin(
+  id INT NOT NULL KEY auto_increment,
+  account VARCHAR (12) NOT NULL,
+  password CHAR (32) NOT NULL,
+  nickname VARCHAR (16) NOT NULL
+) ENGINE=InnoDB, DEFAULT charset=utf8;
 
 /* 多对多的关系连接表 */
 
@@ -50,3 +56,5 @@ insert into wb_tags (name) values ('密码学');
 insert into rel_article_tag (article_id, tag_id) values (1000, 1000);
 insert into rel_article_tag (article_id, tag_id) values (1000, 1002);
 insert into rel_article_tag (article_id, tag_id) values (1001, 1000);
+
+insert into wb_admin (id, account, password, nickname) values (NULL ,'yotwei', md5('kurozaki'), 'Yotwei');

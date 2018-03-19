@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Yotwei博客 | 文章列表</title>
 
     <link rel="stylesheet" href="../static/css/yot-nav.css">
     <link rel="stylesheet" href="../static/css/font-awesome.css">
@@ -14,9 +14,11 @@
 
     <style>
         body {
+            background: url("../static/images/bj.png");
+            background-repeat: repeat;
+            background-attachment: fixed;
             overflow-y: scroll;
             margin: 0;
-            background-color: #f1f1f1;
             min-width: 1280px;
         }
 
@@ -33,13 +35,29 @@
         }
 
         #tag-list-box {
-            padding: 12px;
+            padding: 8px;
+        }
+
+        #null-return-data {
+            display: none;
+        }
+
+        #article-recommend-list-frame {
+            display: none;
+        }
+
+        #tag-list-frame {
+            display: none;
         }
 
         .article-preview-item {
             margin-bottom: 8px;
             position: relative;
             padding: 1.2em;
+        }
+
+        .article-preview-item:hover {
+            cursor: default;
         }
 
         .article-preview-item-img {
@@ -61,6 +79,10 @@
             max-width: 20em;
             overflow-x: hidden;
             font-weight: bolder;
+        }
+
+        .article-preview-item-title:hover {
+            color: cadetblue;
         }
 
         .article-preview-item-intro {
@@ -86,6 +108,7 @@
         }
 
         .article-preview-item-read-btn:hover {
+            cursor: pointer;
             background-color: GrayText;
         }
 
@@ -102,7 +125,7 @@
             bottom: 1.8em;
             color: GrayText;
             font-size: small;
-            left: 24em;
+            left: 26em;
         }
 
         .article-preview-item-mark {
@@ -203,20 +226,10 @@
         $(window).ready(function () {
             $('#nav-space-fill').css('height', $('#nav-box').height());
 
-            //test load recommend article
-            for (var i = 1; i < 7; i++) {
-                recommend_list_add_item(
-                    {
-                        id: i,
-                        coverUrl: '',
-                        title: '这是第' + i + '篇推荐'
-                    })
-            }
-
             //test load date-classify item
-            date_classify_list_add_item({id: 1, date: '2017年12月', articleCount: 10});
-            date_classify_list_add_item({id: 2, date: '2018年1月', articleCount: 1});
-            date_classify_list_add_item({id: 3, date: '2018年2月', articleCount: 11});
+            // date_classify_list_add_item({id: 1, date: '2017年12月', articleCount: 10});
+            // date_classify_list_add_item({id: 2, date: '2018年1月', articleCount: 1});
+            // date_classify_list_add_item({id: 3, date: '2018年2月', articleCount: 11});
 
 
             //load tags
@@ -225,17 +238,46 @@
                     retData.data.forEach(function (item) {
                         tag_list_add_item(item);
                     });
+                    $('#article-recommend-list-frame').show().addClass('zoomIn animated');
+                }
+            });
+
+            //load recommend article
+            $.get(api_url('/article/recommend/list'), function (retData) {
+                if (retData.code == 200) {
+                    retData.data.forEach(function (item) {
+                        recommend_list_add_item(item);
+                    });
+                    $('#tag-list-frame').show().addClass('zoomIn animated');
                 }
             });
 
             //ajax load article preview
-            $.get(api_url('/article/preview/list?len=5'), function (retData) {
+            var tagId = get_url_param('tagid');
+            if (!tagId) {
+                $.post(api_url('/article/preview/list'), {
+                    len: 5
+                }, articlePreviewCallback);
+            } else {
+                $.post(api_url('/article/preview/list'), {
+                    len: 5,
+                    tag_id: tagId
+                }, articlePreviewCallback);
+            }
+
+            function articlePreviewCallback(retData) {
                 if (retData.code == 200) {
+                    if (retData.data.length == 0) {
+                        $('#null-return-data').show();
+                        return;
+                    }
                     retData.data.forEach(function (item) {
-                        article_list_add_item(item);
+                        article_list_add_item(item)
                     });
+                } else {
+                    window.location.href = 'home.html';
                 }
-            });
+            }
         });
 
         $(window).scroll(function (e) {
@@ -255,7 +297,7 @@
                     .append($('<img>').attr('src', item.coverUrl))
                     .append($('<label>').text(item.title))
                     .click(function () {
-                        alert(item.id);
+                        window.location.href = 'article-detail.html?id=' + item.id;
                     })
             );
         }
@@ -275,7 +317,11 @@
                     )
                     .append($('<span class="article-preview-item-mark">').text('原创'))
                     .append($('<div class="article-preview-item-infos">')
-                        .append($('<label class="article-preview-item-title">').text(item.title))
+                        .append($('<label class="article-preview-item-title">')
+                            .text(item.title)
+                            .click(function () {
+                                window.location.href = 'article-detail.html?id=' + item.id;
+                            }))
                         .append($('<p class="article-preview-item-intro">').text(item.intro))
                     )
                     .append($('<span class="article-preview-item-date">')
@@ -284,18 +330,26 @@
                     .append($('<span class="article-preview-item-read-count fa fa-eye">')
                         .text(' ' + item.readCount)
                     )
-                    .append($('<button class="article-preview-item-read-btn">').text('阅读全文'))
+                    .append(
+                        $('<button class="article-preview-item-read-btn">')
+                            .text('阅读全文')
+                            .click(function () {
+                                window.location.href = 'article-detail.html?id=' + item.id;
+                            })
+                    )
             );
         }
 
         function tag_list_add_item(item) {
-            console.log(item);
             $('#tag-list-box').append(
                 $('<span class="tag-item">')
                     .css('backgroundColor',
                         PAGE_VARS.RND_COLORS[random_integer(PAGE_VARS.RND_COLORS.length)]
                     )
                     .text(item.name)
+                    .click(function () {
+                        window.location.href = 'articles.html?tagid=' + item.id;
+                    })
             );
         }
 
@@ -306,6 +360,7 @@
                     .append($('<label>').text(item.articleCount))
             );
         }
+
     </script>
 </head>
 
@@ -316,7 +371,7 @@
             <img src="../static/images/yotwei.png">
         </div>
         <div id="nav-right">
-            <div class="nav-item">
+            <div class="nav-item" onclick="window.location.href='home.html'">
                 <i class="fa fa-home"></i>
                 <strong>首页</strong>
             </div>
@@ -325,7 +380,7 @@
                 <i class="fa fa-newspaper-o"></i>
                 <strong>全部文章</strong>
             </div>
-            <div class="nav-item">
+            <div class="nav-item" onclick="window.location.href='guestmsg.html'">
                 <i class="fa fa-sticky-note-o"></i>
                 <strong>留言板</strong>
             </div>
@@ -342,26 +397,21 @@
     <div id="left-box">
         <div id="article-list-box">
         </div>
+        <div id="null-return-data">
+            <h4 style="text-align: center">这个分类下还没有文章 (:</h4>
+        </div>
     </div>
     <div id="right-box">
-        <div class="yot-box">
+        <div id="article-recommend-list-frame" class="yot-box">
             <div class="module-sub-title">
                 <span class="fa fa-th-list"></span>
                 <label>博主推荐</label>
             </div>
             <div id="article-recommend-list-box">
-                <!--<div class="article-recommend-item">-->
-                <!--<img src="home.html">-->
-                <!--<label>这是标题哈哈哈哈哈哈哈</label>-->
-                <!--</div>-->
-                <!--<div class="article-recommend-item">-->
-                <!--<img src="home.html">-->
-                <!--<label>这是标题哈哈哈哈哈哈哈这是标题哈哈哈哈哈哈哈</label>-->
-                <!--</div>-->
             </div>
         </div>
 
-        <div style="margin-top: 8px" class="yot-box">
+        <div id="tag-list-frame" style="margin-top: 8px" class="yot-box">
             <div class="module-sub-title">
                 <span class="fa fa-th-list"></span>
                 <label>标签分类</label>
@@ -371,7 +421,8 @@
             </div>
         </div>
 
-        <div style="margin-top: 8px" class="yot-box">
+        <!--
+        <div style="margin-top: 8px; " class="yot-box">
             <div class="module-sub-title">
                 <span class="fa fa-th-list">
                 </span>
@@ -380,6 +431,7 @@
             <div id="date-classify-list-box">
             </div>
         </div>
+        -->
 
     </div>
 </div>

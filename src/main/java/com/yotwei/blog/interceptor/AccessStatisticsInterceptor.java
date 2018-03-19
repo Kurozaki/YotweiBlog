@@ -14,7 +14,6 @@ public class AccessStatisticsInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object o)
             throws Exception {
-
         return true;
     }
 
@@ -28,5 +27,6 @@ public class AccessStatisticsInterceptor implements HandlerInterceptor {
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object o,
                                 Exception e) throws Exception {
     }
+
 
 }

@@ -17,12 +17,16 @@
 
     </bean>
 
-
     <!--访问统计的拦截器-->
     <mvc:interceptors>
         <mvc:interceptor>
             <mvc:mapping path="/**"/>
             <bean class="com.yotwei.blog.interceptor.AccessStatisticsInterceptor"/>
+        </mvc:interceptor>
+
+        <mvc:interceptor>
+            <mvc:mapping path="/admin/**"/>
+            <bean class="com.yotwei.blog.interceptor.AdminInterceptor"/>
         </mvc:interceptor>
     </mvc:interceptors>
 </beans>
