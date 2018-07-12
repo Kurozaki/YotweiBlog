@@ -1,69 +1,69 @@
 package com.yotwei.blog.controller;
 
-import com.yotwei.blog.dto.ArticleDetail;
-import com.yotwei.blog.dto.ResponseBean;
+import com.yotwei.blog.enity.ArticleContent;
+import com.yotwei.blog.enity.ArticlePreview;
+import com.yotwei.blog.enity.ResponseBean;
 import com.yotwei.blog.service.ArticleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-/**
- * Created by YotWei on 2018/2/6.
- */
+import java.util.List;
+import java.util.Map;
 
-@CrossOrigin("*")
+/**
+ * Created by YotWei on 2018/6/27.
+ */
 @Controller
+@RequestMapping("/article")
 @ResponseBody
-@RequestMapping(value = "/article", produces = "text/json; charset=utf-8")
+@CrossOrigin("*")
 public class ArticleController {
 
+    private final ArticleService articleService;
+
     @Autowired
-    private ArticleService articleService;
-
-    /**
-     * [文章模块] 返回全部标签
-     */
-    @RequestMapping("/tags/list")
-    public String getTagList() {
-        return ResponseBean.success(articleService.getAllTags()).toString();
+    public ArticleController(ArticleService articleService) {
+        this.articleService = articleService;
     }
 
-    /**
-     * [首页/文章模块] 文章预览列表
-     */
-    @RequestMapping("/preview/list")
-    public String getArticlePreviewList(
-            @RequestParam("len") int length,
-            @RequestParam(value = "offset", defaultValue = "0") int offset,
-            @RequestParam(value = "tag_id", defaultValue = "-1") int tagId) {
-        return ResponseBean.success(articleService.getArticlePreviewList(offset, length, tagId)).toString();
+    @RequestMapping("/previewlist")
+    public List<ArticlePreview> getArticlePreviewList(
+            @RequestParam(value = "page", defaultValue = "0") int page) {
+        return articleService.getArticlePreviewList(page);
     }
 
-    /**
-     * [文章模块] 文章详情
+    @RequestMapping("/detail")
+    public Map<String, Object> getArticleContent(
+            @RequestParam("articleId") int articleId) {
+        return articleService.getArticleDetail(articleId);
+    }
+
+    @RequestMapping("/statistics")
+    public Map<String, Integer> statistics() {
+        return articleService.getStatisticsInfo();
+    }
+
+    /*
+     * for admin
      */
-    @RequestMapping("/detail/{articleId}")
-    public String getArticleDetail(@PathVariable("articleId") int articleId) {
-        ArticleDetail detail = articleService.getArticleDetailById(articleId);
-        if (detail == null) {
-            return ResponseBean.error("No such article.").toString();
+    @RequestMapping("/add")
+    public ResponseBean addArticle(@RequestParam("title") String title,
+                                   @RequestParam("intro") String intro,
+                                   @RequestParam("content") String content) {
+
+        ArticlePreview pv = new ArticlePreview();
+        pv.setTitle(title);
+        pv.setIntro(intro);
+
+        ArticleContent cnt = new ArticleContent();
+        cnt.setContent(content);
+        try {
+            articleService.addArticle(pv, cnt);
+            return ResponseBean.success();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        return ResponseBean.success(detail).toString();
-    }
-
-    /**
-     * [文章模块] 文章推荐列表
-     */
-    @RequestMapping("/recommend/list")
-    public String getArticleRecommendList() {
-        return ResponseBean.success(articleService.getArticleRecommendList()).toString();
-    }
-
-    /**
-     * [首页] 显示文章总数和阅读总数
-     */
-    @RequestMapping("/statis")
-    public String getArticleStatisInfo() {
-        return ResponseBean.success(articleService.getArticleStatisInfo()).toString();
+        return ResponseBean.error(null);
     }
 }

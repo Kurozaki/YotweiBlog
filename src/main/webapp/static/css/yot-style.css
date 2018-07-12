@@ -21,3 +21,29 @@
     vertical-align: middle;
     font-size: small;
 }
+
+.yot-btn {
+    transition-duration: 200ms;
+    border: none;
+    border-radius: 4px;
+    background-color: #aaaaaa;
+    color: white;
+    padding: 6px 12px;
+}
+
+.yot-btn:hover {
+    cursor: pointer;
+}
+
+.yot-btn:focus {
+    outline: none;
+}
+
+.bg-theme {
+    background-color: cornflowerblue;
+}
+
+.bg-theme:hover {
+    background-color: #5384dc;
+}
+

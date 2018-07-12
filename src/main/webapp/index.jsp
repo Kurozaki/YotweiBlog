@@ -1,2 +1,2 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<jsp:forward page="/views/home.html"/>
+<%--<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>--%>
+<%--<% response.sendRedirect("/blog/views/home.html");%>--%>

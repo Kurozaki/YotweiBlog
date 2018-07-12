@@ -191,12 +191,6 @@
 
     <script>
         $(document).ready(function () {
-            //client check
-            if (isMobile()) {
-                window.location.href = 'mhome';
-                return;
-            }
-
             // display initial animations
             initialAnimated();
 
@@ -227,11 +221,11 @@
             </div>
 
             <div class="nav init-hidden">
-                <div class="nav-item selected">
+                <div class="nav-item" onclick="window.location.href='/home'">
                     <span class="fa fa-fw fa-home"></span>
                     <span>HOME</span>
                 </div>
-                <div class="nav-item" onclick="window.location.href='/blog'">
+                <div class="nav-item selected">
                     <span class="fa fa-fw fa-archive"></span>
                     <span>BLOG</span>
                 </div>

@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Yotwei的博客</title>
+    <link rel="icon" href="../static/images/wicon.png">
+
+    <link rel="stylesheet" href="../static/css/framecss.css">
+    <link rel="stylesheet" href="../static/css/font-awesome.css">
+    <link rel="stylesheet" href="../static/css/animate.css">
+    <link rel="stylesheet" href="../static/css/highlight/default.css">
+
+    <style>
+        body {
+            text-align: center;
+            background-color: #F0F0F0;
+            margin: 0;
+        }
+
+        #main-area {
+            padding: 3em;
+            min-height: 720px;
+        }
+
+        .article-title {
+            transition-property: color;
+            transition-duration: 500ms;
+            font-size: x-large;
+        }
+
+        .article-info {
+            color: GrayText;
+            font-size: small;
+            padding: 1.4em;
+            vertical-align: middle;
+        }
+
+        .article-info > span {
+            display: inline-block;
+            font-size: small;
+            margin-right: 0.4em;
+        }
+
+        .article-info > span + span:before {
+            margin-right: 0.4em;
+            content: '|';
+        }
+
+        .article-info > span > span {
+            padding: 0.2em;
+        }
+
+        .article-content {
+            border-top: 1px dashed #dddddd;
+            color: #666666;
+            margin-top: 2em;
+            padding-top: 2em;
+            font-size: small;
+            text-align: left;
+        }
+
+    </style>
+
+    <script src="../static/js/jquery-3.2.1.min.js"></script>
+    <script src="../static/js/public.js"></script>
+    <script src="../static/js/highlight.pack.js"></script>
+
+    <script>
+
+        function initCalendar() {
+            var monthEng = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            var date = new Date();
+
+            $('.c-year-month').text(monthEng[date.getMonth()] + ', ' + date.getFullYear());
+            $('.c-day').text(Format.zereoill(date.getDate(), 2));
+        }
+
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            // initial calendar
+            initCalendar();
+
+            $('pre code').each(function (index, e) {
+                hljs.highlightBlock(e);
+            });
+
+            $('h3').before().css('content', '*');
+        });
+    </script>
+</head>
+<body>
+<div class="header">
+    <div class="slider">
+        <div class="basic-frame">
+            <div class="info">
+                <img class="avatar" src="../static/images/avatar.png">
+                <span class="nickname">Yotwei</span>
+                <div class="motto">
+                    <span class="fa fa-quote-left"></span>
+                    如果结果不如你所愿，就在尘埃落定前奋力一搏。
+                    <span class="fa fa-quote-right"></span>
+                </div>
+            </div>
+            <div class="nav init-hidden">
+                <div class="nav-item" onclick="window.location.href='/home'">
+                    <span class="fa fa-fw fa-home"></span>
+                    <span>HOME</span>
+                </div>
+                <div class="nav-item" onclick="window.location.href='/blog'">
+                    <span class="fa fa-fw fa-archive"></span>
+                    <span>BLOG</span>
+                </div>
+                <div class="nav-item" onclick="window.location.href='/moment'">
+                    <span class="fa fa-fw fa-photo"></span>
+                    <span>MOMENT</span>
+                </div>
+                <div class="nav-item" onclick="window.location.href='/about'">
+                    <span class="fa fa-fw fa-question-circle-o"></span>
+                    <span>ABOUT</span>
+                </div>
+            </div>
+        </div>
+        <div class="invisible"></div>
+        <div class="basic-frame">
+            <div class="title-today">
+                <span class="fa fa-calendar"></span>
+                <span>TODAY</span>
+            </div>
+            <div class="calendar">
+                <div class="c-day">
+                    0
+                </div>
+                <div class="c-year-month">
+                    <!--July, 2018-->
+                    []
+                </div>
+                <div class="c-week">Sunday</div>
+            </div>
+        </div>
+    </div>
+    <div class="content">
+        <div id="main-area" class="basic-frame">
+            <div class="article-title">
+                []
+            </div>
+            <div class="article-info">
+                <span>
+                    <span class="fa fa-calendar-o"></span>
+                    <span id="create-time"></span>
+                </span>
+                <span>
+                    <span class="fa fa-eye"></span>
+                    <span id="read-count"></span>
+                </span>
+            </div>
+            <div class="article-content">
+                <h2>
+                    题目描述
+                </h2>
+                <p>
+                    最近看到一道比较有趣的算法题，原题是这样的： 写一个函数，求两个整数（int）之和，要求在函数体内不得使用+、-、*、/四则运算符号。
+                </p>
+                <h2>
+                    我的解法
+                </h2>
+                <pre><code>public int add(int num1, int num2) {
+    return (num1 & num2) == 0 ? num1 ^ num2 : add(num1 ^ num2, (num1 & num2) << 1);
+}</code></pre>
+                <p>
+                    只有一行，很简洁对吧，下面我来慢慢说明思路。
+                </p>
+                <h2>
+                    解题思路
+                </h2>
+                <p>
+                    这是考察对计算机加法的理解，既然常规的四则运算不能使用，那就要从位运算的角度出发来考虑问题了。
+                </p>
+                <p>
+                    基于二进制加法，现在考虑两种情况
+                </p>
+                <h3>
+                    1、相加不产生进位
+                </h3>
+                <p>
+                    当两个二进制相加不产生进位时，A+B与A^B是完全等价的（^表示异或） 举个栗子，9+2
+                </p>
+                <p>
+                    对于加法运算
+                </p>
+                <pre><code>1 0 0 1
+0 0 1 0 +
+————
+1 0 1 1</code></pre>
+                <p>
+                    对于异或运算
+                </p>
+                <pre><code>1 0 0 1
+0 0 1 0 ^
+————
+1 0 1 1</code></pre>
+                <p>
+                    因为不产生进位，因此加法的每一位不会对下一位产生影响，而异或正好也是按位运算，二者是等价的。
+                </p>
+
+                <h3>
+                    2、相加产生进位
+                </h3>
+                <p>
+                    这种情况就是在按位异或的基础上与进位相加。进位的条件是两个1相加，因此通过按位与运算（&）就可以找到进位的位置，由于是向高一位进位，所以两数相与后还需要左移一位，最后将相与移位，按位异或的结果相加，这又回到了两数相加的问题，重复递归到两数相加无进位终止即可。
+                </p>
+                <h3>
+                    整合的代码如下
+                </h3>
+                <pre><code>    public int add(int num1, int num2) {
+        if ((num1 & num2) == 0) {
+            //相与为0，不产生进位
+            return num1 ^ num2;
+        } else {
+            //相与不为0，产生进位
+            return add(num1 ^ num2, (num1 & num2) << 1);
+        }
+    }</code></pre>
+                <p>
+                    这种场合下if…else…写法有点low，简化成三目运算符 a? b: c
+                </p>
+                <pre><code>public int add(int num1, int num2) {
+    return (num1 & num2) == 0 ? num1 ^ num2 : add(num1 ^ num2, (num1 & num2) << 1);
+}</code></pre>
+                <p>
+                    如果觉得递归会给你的效率带来影响，也可以写成循环的形式
+                </p>
+                <pre><code>class Test {
+    public int add(int num1, int num2) {
+        int temp;
+        while (num2 != 0) {
+            temp = num1 ^ num2;
+            num2 = (num1 & num2) << 1;
+            num1 = temp;
+        }
+        return num1;
+    }
+}</code></pre>
+                <h3>
+                    最后可能有人会问跟<strong>负数相加会怎样</strong>？
+                </h3>
+                <p>
+                    在计算机运算中，<label style="color: darkred">由于补码的存在，使得减法既是加法</label>，加减法的计算过程是完全相同的，就算用负数来测试也能得到正确的结果
+                </p>
+            </div>
+        </div>
+        <div class="copyright">
+            <span>YotweiWong</span>
+            <span class="fa fa-copyright"></span>
+            <span>2018</span>
+        </div>
+        <div>
+
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

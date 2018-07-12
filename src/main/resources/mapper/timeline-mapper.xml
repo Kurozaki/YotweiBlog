@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yotwei.blog.dao.TimelineDao">
+    <select id="queryTimelineNodes" resultType="com.yotwei.blog.enity.TimelineNode">
+        SELECT *
+        FROM wb_timeline
+        ORDER BY create_time DESC
+        LIMIT #{offset}, #{length};
+    </select>
+
+    <insert id="insertTimelineNode" parameterType="com.yotwei.blog.enity.TimelineNode">
+        INSERT INTO wb_timeline(id, create_time, content, assoc_url)
+        VALUES (#{id}, #{createTime}, #{content}, #{assocUrl});
+    </insert>
+</mapper>

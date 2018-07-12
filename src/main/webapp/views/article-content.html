@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Yotwei的博客</title>
+    <link rel="icon" href="../static/images/wicon.png">
+
+    <link rel="stylesheet" href="../static/css/framecss.css">
+    <link rel="stylesheet" href="../static/css/font-awesome.css">
+    <link rel="stylesheet" href="../static/css/animate.css">
+    <link rel="stylesheet" href="../static/css/highlight/default.css">
+    </li>
+
+    <style>
+        body {
+            text-align: center;
+            background-color: #F0F0F0;
+            margin: 0;
+        }
+
+        /*pre, span {*/
+            /*vertical-align: middle;*/
+        /*}*/
+
+        #main-area {
+            padding: 3em;
+            min-height: 720px;
+        }
+
+        .article-title, .article-info, .article-content {
+            display: none;
+        }
+
+        .article-title {
+            transition-property: color;
+            transition-duration: 500ms;
+            font-size: x-large;
+        }
+
+        .article-info {
+            color: GrayText;
+            font-size: small;
+            padding: 1.4em;
+            vertical-align: middle;
+        }
+
+        .article-info > span {
+            display: inline-block;
+            font-size: small;
+            margin-right: 0.4em;
+        }
+
+        .article-info > span + span:before {
+            margin-right: 0.4em;
+            content: '|';
+        }
+
+        .article-info > span > span {
+            padding: 0.2em;
+        }
+
+        .article-content {
+            border-top: 1px dashed #dddddd;
+            color: #666666;
+            margin-top: 2em;
+            padding-top: 2em;
+            font-size: small;
+            text-align: left;
+        }
+
+        .loading {
+            font-size: 150%;
+        }
+
+    </style>
+
+    <script src="../static/js/jquery-3.2.1.min.js"></script>
+    <script src="../static/js/public.js"></script>
+    <script src="../static/js/highlight.pack.js"></script>
+
+    <script>
+
+        function initialAnimated() {
+            $('.init-hidden').slideDown();
+        }
+
+        function initCalendar() {
+            var monthEng = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            var date = new Date();
+
+            $('.c-year-month').text(monthEng[date.getMonth()] + ', ' + date.getFullYear());
+            $('.c-day').text(Format.zereoill(date.getDate(), 2));
+        }
+
+        function loadArticleDetail() {
+            $.get(urlApi('/article/detail?articleId=' + getArticleIdFromUrl()), function (ret) {
+                var empty;
+                // noinspection ALL
+                for (var k in ret) {
+                    empty = false;
+                    break;
+                }
+                if (empty) {
+                    alert('ERROR');
+                }
+
+                $('.loading').hide();
+                $('.article-title').text(ret.preview.title).fadeIn();
+                $('#read-count').text(ret.preview.readCount);
+                $('#create-time').text(ret.preview.createTime);
+                $('.article-info').fadeIn();
+                $('.article-content').html(ret.content.content).slideDown();
+
+                $('pre code').each(function (index, e) {
+                    hljs.highlightBlock(e);
+                })
+            });
+        }
+
+        function getArticleIdFromUrl() {
+            var url = window.location.href;
+            return url.substr(url.lastIndexOf("/") + 1);
+        }
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            // mobile client check
+            if (isMobile()) {
+                window.location.href = '/mhome';
+                return;
+            }
+
+            // display initial animations
+            initialAnimated();
+
+            // initial calendar
+            initCalendar();
+
+            // load article detail
+            loadArticleDetail();
+        });
+    </script>
+</head>
+<body>
+<div class="header">
+    <div class="slider">
+        <div class="basic-frame">
+            <div class="info">
+                <img class="avatar" src="../static/images/avatar.png">
+                <span class="nickname">Yotwei</span>
+                <div class="motto">
+                    <span class="fa fa-quote-left"></span>
+                    如果结果不如你所愿，就在尘埃落定前奋力一搏。
+                    <span class="fa fa-quote-right"></span>
+                </div>
+            </div>
+            <div class="nav init-hidden">
+                <div class="nav-item" onclick="window.location.href='/home'">
+                    <span class="fa fa-fw fa-home"></span>
+                    <span>HOME</span>
+                </div>
+                <div class="nav-item" onclick="window.location.href='/blog'">
+                    <span class="fa fa-fw fa-archive"></span>
+                    <span>BLOG</span>
+                </div>
+                <div class="nav-item" onclick="window.location.href='/moment'">
+                    <span class="fa fa-fw fa-photo"></span>
+                    <span>MOMENT</span>
+                </div>
+                <div class="nav-item" onclick="window.location.href='/about'">
+                    <span class="fa fa-fw fa-question-circle-o"></span>
+                    <span>ABOUT</span>
+                </div>
+            </div>
+        </div>
+        <div class="invisible"></div>
+        <div class="basic-frame">
+            <div class="title-today">
+                <span class="fa fa-calendar"></span>
+                <span>TODAY</span>
+            </div>
+            <div class="calendar">
+                <div class="c-day">
+                    0
+                </div>
+                <div class="c-year-month">
+                    <!--July, 2018-->
+                    []
+                </div>
+                <div class="c-week">Sunday</div>
+            </div>
+        </div>
+    </div>
+    <div class="content">
+        <div id="main-area" class="basic-frame">
+            <div class="loading">
+                <span class="fa fa-spinner fa-spin"></span>
+                <span>
+                    LOADING...
+                </span>
+            </div>
+            <div class="article-title">
+                []
+            </div>
+            <div class="article-info">
+                <span>
+                    <span class="fa fa-calendar-o"></span>
+                    <span id="create-time"></span>
+                </span>
+                <span>
+                    <span class="fa fa-eye"></span>
+                    <span id="read-count"></span>
+                </span>
+            </div>
+            <div class="article-content"></div>
+        </div>
+        <div class="copyright">
+            <span>YotweiWong</span>
+            <span class="fa fa-copyright"></span>
+            <span>2018</span>
+        </div>
+        <div>
+
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

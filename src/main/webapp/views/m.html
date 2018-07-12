@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Yotwei的博客</title>
+    <link rel="icon" href="../static/images/wicon.png">
+
+    <link rel="stylesheet" href="../static/css/framecss.css">
+    <link rel="stylesheet" href="../static/css/font-awesome.css">
+    <link rel="stylesheet" href="../static/css/animate.css">
+
+    <style>
+        body {
+            text-align: center;
+            background-color: #F0F0F0;
+            margin: 0;
+        }
+
+        span {
+            vertical-align: middle;
+        }
+
+        #main-area {
+            min-height: 720px;
+        }
+
+    </style>
+
+    <script src="../static/js/jquery-3.2.1.min.js"></script>
+    <script src="../static/js/public.js"></script>
+
+    <script>
+
+        function initialAnimated() {
+            $('.init-hidden').slideDown();
+        }
+
+        function initCalendar() {
+            var monthEng = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            var date = new Date();
+
+            $('.c-year-month').text(monthEng[date.getMonth()] + ', ' + date.getFullYear());
+            $('.c-day').text(Format.zereoill(date.getDate(), 2));
+        }
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            // display initial animations
+            initialAnimated();
+
+            // initial calendar
+            initCalendar();
+        });
+    </script>
+</head>
+<body>
+<div class="header">
+    <div class="slider">
+        <div class="basic-frame">
+            <div class="info">
+                <img class="avatar" src="../static/images/avatar.png">
+                <span class="nickname">Yotwei</span>
+                <div class="motto">
+                    <span class="fa fa-quote-left"></span>
+                    如果结果不如你所愿，就在尘埃落定前奋力一搏。
+                    <span class="fa fa-quote-right"></span>
+                </div>
+            </div>
+
+            <div class="nav init-hidden">
+                <div class="nav-item selected">
+                    <span class="fa fa-fw fa-home"></span>
+                    <span>HOME</span>
+                </div>
+                <div class="nav-item">
+                    <span class="fa fa-fw fa-archive"></span>
+                    <span>BLOG</span>
+                </div>
+                <div class="nav-item">
+                    <span class="fa fa-fw fa-photo"></span>
+                    <span>MOMENT</span>
+                </div>
+                <div class="nav-item">
+                    <span class="fa fa-fw fa-question-circle-o"></span>
+                    <span>ABOUT</span>
+                </div>
+            </div>
+        </div>
+        <div class="invisible"></div>
+        <div class="basic-frame">
+            <div class="title-today">
+                <span class="fa fa-calendar"></span>
+                <span>TODAY</span>
+            </div>
+            <div class="calendar">
+                <div class="c-day">
+                    0
+                </div>
+                <div class="c-year-month">
+                    <!--July, 2018-->
+                    []
+                </div>
+                <div class="c-week">Sunday</div>
+            </div>
+        </div>
+
+    </div>
+    <div class="content">
+        <div id="main-area">
+        </div>
+
+
+        <div class="copyright">
+            <span>YotweiWong</span>
+            <span class="fa fa-copyright"></span>
+            <span>2018</span>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

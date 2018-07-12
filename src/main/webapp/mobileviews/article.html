@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=false"/>
+    <title></title>
+
+    <link rel="icon" href="../static/images/wicon.png">
+
+    <link rel="stylesheet" href="../static/css/framecss.css">
+    <link rel="stylesheet" href="../static/css/font-awesome.css">
+    <link rel="stylesheet" href="../static/css/animate.css">
+    <link rel="stylesheet" href="../static/css/highlight/default.css">
+
+    <script src="../static/js/jquery-3.2.1.min.js"></script>
+    <script src="../static/js/public.js"></script>
+    <script src="../static/js/highlight.pack.js"></script>
+
+    <style>
+
+        .article-area {
+            display: none;
+        }
+
+        .article-title {
+            padding: 0.8em;
+            text-align: center;
+            font-size: 22px;
+        }
+
+        .article-info {
+            padding-bottom: 1.2em;
+            margin: 0 2em;
+            text-align: center;
+            color: GrayText;
+            font-size: 14px;
+            border-bottom: 1px solid #dddddd;
+        }
+
+        .article-content {
+            color: #444444;
+            padding: 0.8em;
+            font-size: 12px;
+        }
+
+        .article-info > span + span:before {
+            content: "|";
+        }
+
+        .copyright {
+            display: none;
+            font-size: 12px;
+            text-align: center;
+            padding: 1em;
+        }
+    </style>
+
+    <script>
+
+        function getArticleId() {
+            var url = window.location.href;
+            return url.substr(url.lastIndexOf('/') + 1);
+        }
+
+        $(document).ready(function () {
+            $.get(urlApi('/article/detail?articleId=' + getArticleId()), function (ret) {
+                // console.log(ret);
+                if (!ret.content) {
+                    alert('ERROR');
+                    return;
+                }
+
+                $('.article-title').text(ret.preview.title);
+                $('.article-create-time').text(ret.preview.createTime);
+                $('.article-read-count').text(ret.preview.readCount);
+
+                $('.article-content').html(ret.content.content);
+
+                $('pre code').each(function (i, e) {
+                    hljs.highlightBlock(e);
+                });
+
+                $('.article-area').fadeIn();
+                $('.copyright').slideDown();
+            });
+        });
+    </script>
+</head>
+<body>
+<div class="article-area">
+    <div class="article-title">
+        <!--title-->
+    </div>
+    <div class="article-info">
+    <span>
+        <span class="fa fa-fw fa-calendar-o"></span>
+        <span class="article-create-time"></span>
+    </span>
+        <span>
+        <span class="fa fa-fw fa-eye"></span>
+        <span class="article-read-count"></span>
+    </span>
+    </div>
+    <div class="article-content"></div>
+</div>
+<div class="copyright">
+    Copyright@2018 Yotwei
+</div>
+</body>
+</html>

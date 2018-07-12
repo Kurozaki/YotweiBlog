@@ -1,33 +1,40 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.yotwei.blog.dao.ArticleDAO">
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-    <select id="getArticlePreviewList" resultType="com.yotwei.blog.enity.Article">
-        SELECT id, title, intro, create_time, article_type, read_count, cover_url
-        FROM wb_article
+<mapper namespace="com.yotwei.blog.dao.ArticleDao">
+    <select id="queryArticlePreviewList" resultType="com.yotwei.blog.enity.ArticlePreview">
+        SELECT *
+        FROM wb_article_preview
+        ORDER BY create_time DESC
         LIMIT #{offset}, #{length};
     </select>
 
-    <select id="getArticlePreviewListByTagId" resultType="com.yotwei.blog.enity.Article">
-        SELECT id, title, intro, create_time, article_type, read_count, cover_url
-        FROM wb_article
-        WHERE id IN (SELECT article_id FROM rel_article_tag WHERE tag_id = #{tagId})
-        LIMIT #{offset}, #{length};
+    <select id="queryTotalCount" resultType="int">
+        SELECT count(1)
+        FROM wb_article_preview;
     </select>
 
-    <select id="getArticleById" resultType="com.yotwei.blog.enity.Article">
-        SELECT * FROM wb_article WHERE id = #{articleId};
+    <select id="queryArticlePreviewById" resultType="com.yotwei.blog.enity.ArticlePreview">
+        SELECT *
+        FROM wb_article_preview
+        WHERE id = #{articleId};
     </select>
 
-    <select id="getArticleRecommendList" resultType="com.yotwei.blog.dto.ArticleRecommend">
-        SELECT id, title, cover_url FROM wb_article LIMIT 5;
+    <select id="queryArticleContentById" resultType="com.yotwei.blog.enity.ArticleContent">
+        SELECT *
+        FROM wb_article_content
+        WHERE article_id = #{articleId};
     </select>
 
-    <select id="admGetArticleList" resultType="Map">
-        SELECT id, title FROM wb_article;
-    </select>
+    <insert id="insertArticlePreview" parameterType="com.yotwei.blog.enity.ArticlePreview"
+            useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+        INSERT INTO wb_article_preview(title, intro)
+        VALUES (#{title}, #{intro});
+    </insert>
 
-    <select id="getArticleStatisInfo" resultType="Map">
-        SELECT COUNT(*) as articleCount, SUM(read_count) as totalReadCount FROM wb_article;
-    </select>
+    <insert id="insertArticleContent" parameterType="com.yotwei.blog.enity.ArticleContent">
+        INSERT INTO wb_article_content(article_id, content)
+        VALUES (#{articleId}, #{content});
+    </insert>
 </mapper>

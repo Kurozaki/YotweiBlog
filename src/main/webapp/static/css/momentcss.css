@@ -1,0 +1,65 @@
+.time-line {
+    min-height: 720px;
+    display: block;
+    border-left: 2px solid #eeeeee;
+}
+
+.moment-item {
+    font-size: small;
+    padding-left: 1.5em;
+    padding-bottom: 4em;
+    position: relative;
+    text-align: left;
+}
+
+.moment-item:hover > .moment-content {
+    cursor: default;
+    background-color: #ebebeb;
+}
+
+.moment-item-mark-point {
+    position: absolute;
+    display: block;
+    left: -5px;
+    top: 4px;
+    border-radius: 50%;
+    width: 8px;
+    height: 8px;
+    background-color: #b6b6b6;
+}
+
+.moment-date {
+    display: block;
+    color: darkgray;
+    font-size: 14px;
+}
+
+.moment-content {
+    transition-property: background-color;
+    transition-duration: 200ms;
+    color: #444444;
+    display: block;
+    border-radius: 4px;
+    margin-top: 0.5em;
+    padding: 0.65em;
+    font-size: 14px;
+    background-color: #f0f0f0;
+}
+
+.moment-text {
+    display: block;
+}
+
+.moment-pics > img {
+    margin-top: 0.5em;
+    background-size: auto;
+    width: 32%;
+    height: 140px;
+}
+
+.moment-location {
+    margin-top: 0.4em;
+    color: GrayText;
+    font-size: small;
+}
+

@@ -1,0 +1,65 @@
+.article-preview {
+    margin-bottom: 0.5em;
+    padding: 4em 3em 2em;
+    cursor: default;
+}
+
+.article-title {
+    transition-property: color;
+    transition-duration: 500ms;
+    font-size: x-large;
+}
+
+.article-preview:hover > .article-title {
+    color: GrayText;
+}
+
+.article-info {
+    color: GrayText;
+    font-size: small;
+    padding: 1.4em;
+    vertical-align: middle;
+}
+
+.article-info > span {
+    display: inline-block;
+    font-size: small;
+    margin-right: 0.4em;
+}
+
+.article-info > span + span:before {
+    margin-right: 0.4em;
+    content: '|';
+}
+
+.article-info > span > span {
+    padding: 0.2em;
+}
+
+.article-intro {
+    margin-top: 2em;
+    text-align: left;
+    color: #666666;
+    font-size: small;
+}
+
+.read-all-btn {
+    transition-duration: 200ms;
+    color: #444444;
+    padding: 0.4em 2em;
+    background-color: white;
+    border-radius: 4px;
+    border: 1px solid #444444;
+    margin-top: 3em;
+    display: inline-block;
+}
+
+.read-all-btn:hover {
+    border-color: white;
+    color: white;
+    background-color: black;
+}
+
+.read-all-btn:focus {
+    outline: none;
+}

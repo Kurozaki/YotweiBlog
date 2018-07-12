@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE urlrewrite PUBLIC "-//tuckey.org//DTD UrlRewrite 2.6//EN"
+        "http://tuckey.org/res/dtds/urlrewrite2.6.dtd">
+<urlrewrite>
+
+    <rule>
+        <from>^/$</from>
+        <to>/views/home.html</to>
+    </rule>
+
+    <rule>
+        <from>^/home$</from>
+        <to>/views/home.html</to>
+    </rule>
+
+    <rule>
+        <from>^/blog$</from>
+        <to>/views/blog.html</to>
+    </rule>
+
+    <rule>
+        <from>^/moment$</from>
+        <to>/views/moment.html</to>
+    </rule>
+
+    <rule>
+        <from>^/about$</from>
+        <to>/views/about.html</to>
+    </rule>
+
+    <rule>
+        <from>^/article/\d+$</from>
+        <to>/views/article-content.html</to>
+    </rule>
+
+    <rule>
+        <from>^/mhome$</from>
+        <to>/mobileviews/home.html</to>
+    </rule>
+
+    <rule>
+        <from>^/marticle/\d+$</from>
+        <to>/mobileviews/article.html</to>
+    </rule>
+</urlrewrite>

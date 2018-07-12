@@ -1,10 +1,9 @@
 package com.yotwei.blog.enity;
 
 /**
- * Created by YotWei on 2018/2/5.
+ * Created by YotWei on 2018/6/27.
  */
-
-public class Tag{
+public class Tag {
 
     private int id;
     private String name;

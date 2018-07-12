@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=false"/>
+    <title>Yotwei's Blog</title>
+    <link rel="icon" href="../static/images/wicon.png">
+
+    <link rel="stylesheet" href="../static/css/framecss.css">
+    <link rel="stylesheet" href="../static/css/font-awesome.css">
+    <link rel="stylesheet" href="../static/css/animate.css">
+    <link rel="stylesheet" href="../static/css/highlight/default.css">
+
+    <script src="../static/js/jquery-3.2.1.min.js"></script>
+    <script src="../static/js/public.js"></script>
+    <script src="../static/js/highlight.pack.js"></script>
+
+    <style>
+        body {
+            background-color: #f0f0f0;
+            margin: 0;
+        }
+
+        .main-content {
+            min-height: 64em;
+            text-align: center;
+            padding: 1em;
+            background-color: white;
+        }
+
+        .article-item {
+            padding: 1.5em 0;
+
+        }
+
+        .article-title, .article-info, .article-intro {
+            display: block;
+        }
+
+        .article-title {
+            /*margin-top: 1em;*/
+            font-size: 24px;
+        }
+
+        .article-info {
+            line-height: 1.8em;
+            color: GrayText;
+            font-size: small;
+            margin-top: 1.2em;
+        }
+
+        .article-intro {
+            font-size: 14px;
+            text-align: left;
+            margin: 2.5em 1.5em 1.5em;
+            color: #222222;
+        }
+
+        .copyright {
+            text-align: center;
+            padding: 1em;
+        }
+
+        .article-info > span > span {
+            vertical-align: middle;
+        }
+
+        .article-info > span + span:before {
+            content: " | ";
+        }
+
+        .split-line {
+            margin-right: 4em;
+            margin-left: 4em;
+            margin-top: 3em;
+            background-color: #dddddd;
+            display: block;
+            height: 1px;
+        }
+
+        .read-more-btn {
+            border-radius: 0.1em;
+            margin-top: 1em;
+            padding: 0.3em 2em;
+            background-color: white;
+            color: #444444;
+            border: 1px solid #444444;
+            display: inline-block;
+        }
+
+        .read-more-btn:hover {
+            color: white;
+            background-color: #444444;
+        }
+
+        button {
+            transition-duration: 200ms;
+        }
+
+        button:focus {
+            outline: none;
+        }
+
+        .load-more {
+            border: 1px dotted darkgray;
+            margin-top: 1em;
+            padding: 0.2em 1em;
+            background-color: white;
+            color: #444444;
+            display: inline-block;
+        }
+
+    </style>
+
+    <script>
+        function insertArticleItem(pv) {
+            var item = $('<div class="article-item animated zoomIn">');
+
+            item.append($('<span class="article-title">').text(pv.title));
+
+            var info = $('<span class="article-info">');
+
+            var readCountE = $('<span>')
+                .append($('<span class="fa fa-fw fa-eye">'))
+                .append($('<span>').text(pv.readCount));
+            info.append(readCountE);
+
+            var dateE = $('<span>')
+                .append($('<span class="fa fa-fw fa-calendar-o">'))
+                .append($('<span>').text(pv.createTime));
+            info.append(dateE);
+
+            item.append(info);
+
+            item.append($('<span class="article-intro">').text(pv.intro));
+            item.append($('<button class="read-more-btn">')
+                .text('READ')
+                .click(function () {
+                    window.location.href = 'marticle/' + pv.id;
+                })
+            );
+            item.append($('<span class="split-line">'));
+
+
+            $('.article-container').append(item);
+        }
+
+        var PAGING = {
+            page: 0,
+            COUNT: 5,
+            hasMore: true
+        };
+
+        function loadArticlePreview() {
+            if (!PAGING.hasMore) {
+                return;
+            }
+            $.get(urlApi('/article/previewlist?page=' + PAGING.page), function (ret) {
+                if (ret) {
+                    ret.forEach(function (value) {
+                        insertArticleItem(value);
+                    });
+                    PAGING.page += 1;
+                    if (ret.length < PAGING.COUNT) {
+                        PAGING.hasMore = false;
+                        $('.load-more').text('NO MORE ARTICLE');
+                    }
+                } else {
+                    PAGING.hasMore = false;
+                    $('.load-more').text('NO MORE ARTICLE');
+                }
+            });
+        }
+
+        $(document).ready(function () {
+            loadArticlePreview();
+
+            $('.load-more').click(function () {
+                loadArticlePreview();
+            })
+        });
+    </script>
+</head>
+<body>
+<div class="main-content">
+    <div class="article-container">
+    </div>
+    <div class="paging">
+        <button class="load-more">LOAD MORE</button>
+    </div>
+</div>
+<div class="copyright">
+    Copyright@2018 Yotwei
+</div>
+</body>
+</html>

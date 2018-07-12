@@ -1,0 +1,118 @@
+.header {
+    margin: 0.5em auto;
+    width: 960px;
+}
+
+.slider {
+    /*position: fixed;*/
+    float: left;
+    width: 240px;
+}
+
+.content {
+    width: 700px;
+    float: right;
+}
+
+.basic-frame {
+    background-color: white;
+    border: 1px solid #dddddd;
+}
+
+.avatar {
+    border: 2px solid #dddddd;
+    border-radius: 50%;
+    width: 96px;
+    height: 96px;
+}
+
+.info {
+    padding: 2.5em 1.5em;
+    background-color: #222222;
+    color: white;
+}
+
+.nickname {
+    font-weight: bold;
+    display: block;
+    font-size: xx-large;
+}
+
+.motto {
+    margin-top: 1.5em;
+    text-align: left;
+    font-size: small;
+}
+
+.invisible {
+    height: 1em;
+}
+
+.init-hidden {
+    display: none;
+}
+
+.nav {
+    padding: 1.2em 0;
+}
+
+.nav-item {
+    transition-property: background-color;
+    transition-duration: 200ms;
+    cursor: default;
+    font-size: small;
+    color: #888888;
+    text-align: left;
+    padding: 0.6em 1.5em;
+    margin: 0.4em 0;
+}
+
+.nav-item:hover {
+    background-color: #f0f0f0;
+}
+
+.title-today {
+    color: GrayText;
+    font-size: small;
+    font-weight: bold;
+    border-bottom: 1px solid #dddddd;
+    margin: 0 0.8em;
+    padding: 0.8em;
+}
+
+.calendar {
+    font-weight: bold;
+    padding-top: 1em;
+    padding-bottom: 2em;
+}
+
+.c-year-month {
+    color: #222222;
+    font-size: small;
+}
+
+.c-day {
+    color: #222222;
+    font-size: 400%;
+}
+
+.c-week {
+    display: none;
+    margin-top: 1em;
+}
+
+.copyright {
+    padding: 1.5em 1em 1em;
+    color: GrayText;
+    line-height: 1.8em;
+    font-size: 14px;
+}
+
+.main-container {
+    min-height: 720px;
+}
+
+.selected {
+    background-color: #f4f4f4;
+    font-weight: bold;
+}
