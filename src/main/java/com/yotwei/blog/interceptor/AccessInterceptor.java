@@ -14,7 +14,6 @@ public class AccessInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object o)
             throws Exception {
-
         return true;
     }
 

@@ -1,6 +1,5 @@
 package com.yotwei.blog.enity;
 
-import java.sql.Timestamp;
 
 /**
  * Created by YotWei on 2018/7/7.
@@ -9,7 +8,7 @@ public class ArticlePreview {
     private int id;
     private String title;
     private String intro;
-    private Timestamp createTime;
+    private String createTime;
     private int articleType;
     private int readCount;
 
@@ -37,11 +36,11 @@ public class ArticlePreview {
         this.intro = intro;
     }
 
-    public Timestamp getCreateTime() {
+    public String getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Timestamp createTime) {
+    public void setCreateTime(String createTime) {
         this.createTime = createTime;
     }
 

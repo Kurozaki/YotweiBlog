@@ -65,4 +65,9 @@ public class ArticleService {
         articleDao.insertArticleContent(content);
         return preview.getId();
     }
+
+    public List<String> getArticleCatalogs() {
+        return articleDao.queryArticleCatalogs();
+    }
+
 }

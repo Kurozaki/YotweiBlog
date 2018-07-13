@@ -3,7 +3,6 @@ package com.yotwei.blog.dao;
 import com.yotwei.blog.enity.ArticleContent;
 import com.yotwei.blog.enity.ArticlePreview;
 import org.apache.ibatis.annotations.Param;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -11,6 +10,8 @@ import java.util.List;
  * Created by YotWei on 2018/7/7.
  */
 public interface ArticleDao {
+
+    List<String> queryArticleCatalogs();
 
     List<ArticlePreview> queryArticlePreviewList(@Param("offset") int offset, @Param("length") int length);
 

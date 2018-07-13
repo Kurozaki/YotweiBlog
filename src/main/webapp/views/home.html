@@ -101,6 +101,24 @@
             });
         }
 
+        function getArticleCatalogs() {
+            $.ajax({
+                url: urlApi('/article/catalogs'),
+                async: false,
+                success: function (ret) {
+                    console.log(ret);
+                    ArticleCatalogs = ret;
+                }
+            });
+        }
+
+        function getStatisticsInfo() {
+            $.get(urlApi('/article/statistics'), function (ret) {
+                if (ret) Paging.StatisticInfo = ret;
+            });
+        }
+    </script>
+    <script>
         function switchPage(page) {
             var targetPage = -1;
             if (isNaN(page)) {
@@ -124,11 +142,7 @@
             loadArticlePreviews(targetPage);
         }
 
-        function getStatisticsInfo() {
-            $.get(urlApi('/article/statistics'), function (ret) {
-                if (ret) Paging.StatisticInfo = ret;
-            });
-        }
+        var ArticleCatalogs = [];
 
         var Paging = {
             curPage: 0,
@@ -139,7 +153,6 @@
         };
 
         var ArticlePreviewContainer = {
-
             // insert article item
             insertItem: function (item) {
                 var preview = $('<div class="article-preview basic-frame animated zoomIn">');
@@ -154,14 +167,15 @@
                     .append($('<span>').text(item.createTime));
                 info.append(createTime);
 
+                // add article catalogs
+                var articleType = $('<span>').append($('<span class="fa fa-folder-o">'))
+                    .append($('<span>').text(ArticleCatalogs[item.articleType]));
+                info.append(articleType);
+
                 // add read count
                 var readCount = $('<span>').append($('<span class="fa fa-eye">'))
                     .append($('<span>').text(item.readCount));
                 info.append(readCount);
-
-                // var articleType = $('<span>').append($('<span class="fa fa-bookmark">'))
-                //     .append($('<span>').text('原创'));
-                // info.append(articleType);
 
                 preview.append(info);
 
@@ -191,9 +205,8 @@
 
     <script>
         $(document).ready(function () {
-            //client check
-            if (isMobile()) {
-                window.location.href = 'mhome';
+            if (isMobile()){
+                window.location.href = '/mhome';
                 return;
             }
 
@@ -202,6 +215,9 @@
 
             // initial calendar
             initCalendar();
+
+            // get catalogs
+            getArticleCatalogs();
 
             // ajax get statistic info
             getStatisticsInfo();
@@ -231,10 +247,6 @@
                     <span class="fa fa-fw fa-home"></span>
                     <span>HOME</span>
                 </div>
-                <div class="nav-item" onclick="window.location.href='/blog'">
-                    <span class="fa fa-fw fa-archive"></span>
-                    <span>BLOG</span>
-                </div>
                 <div class="nav-item" onclick="window.location.href='/moment'">
                     <span class="fa fa-fw fa-photo"></span>
                     <span>MOMENT</span>
@@ -253,11 +265,8 @@
             </div>
             <div class="calendar">
                 <div class="c-day">
-                    0
                 </div>
                 <div class="c-year-month">
-                    <!--July, 2018-->
-                    []
                 </div>
                 <div class="c-week">Sunday</div>
             </div>

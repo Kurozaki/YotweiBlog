@@ -1,5 +1,6 @@
 package com.yotwei.blog.controller;
 
+import com.yotwei.blog.enity.ArticleCatalog;
 import com.yotwei.blog.enity.ArticleContent;
 import com.yotwei.blog.enity.ArticlePreview;
 import com.yotwei.blog.enity.ResponseBean;
@@ -25,6 +26,11 @@ public class ArticleController {
     @Autowired
     public ArticleController(ArticleService articleService) {
         this.articleService = articleService;
+    }
+
+    @RequestMapping("/catalogs")
+    public List<String> getArticleCatalogs() {
+        return articleService.getArticleCatalogs();
     }
 
     @RequestMapping("/previewlist")

@@ -18,7 +18,7 @@
 
     <style>
         body {
-            background-color: #f0f0f0;
+            background-color: white;
             margin: 0;
         }
 
@@ -31,7 +31,6 @@
 
         .article-item {
             padding: 1.5em 0;
-
         }
 
         .article-title, .article-info, .article-intro {
@@ -39,7 +38,6 @@
         }
 
         .article-title {
-            /*margin-top: 1em;*/
             font-size: 24px;
         }
 
@@ -85,7 +83,7 @@
             padding: 0.3em 2em;
             background-color: white;
             color: #444444;
-            border: 1px solid #444444;
+            border: 1px solid #888888;
             display: inline-block;
         }
 
@@ -121,15 +119,20 @@
 
             var info = $('<span class="article-info">');
 
-            var readCountE = $('<span>')
-                .append($('<span class="fa fa-fw fa-eye">'))
-                .append($('<span>').text(pv.readCount));
-            info.append(readCountE);
-
             var dateE = $('<span>')
                 .append($('<span class="fa fa-fw fa-calendar-o">'))
                 .append($('<span>').text(pv.createTime));
             info.append(dateE);
+
+            var catalogE = $('<span>')
+                .append($('<span class="fa fa-fw fa-folder">'))
+                .append($('<span>').text(ArticleCatalogs[pv.articleType]));
+            info.append(catalogE);
+
+            var readCountE = $('<span>')
+                .append($('<span class="fa fa-fw fa-eye">'))
+                .append($('<span>').text(pv.readCount));
+            info.append(readCountE);
 
             item.append(info);
 
@@ -152,33 +155,43 @@
             hasMore: true
         };
 
+        var ArticleCatalogs = [];
+
         function loadArticlePreview() {
             if (!PAGING.hasMore) {
                 return;
             }
+
+            PAGING.hasMore = false;
             $.get(urlApi('/article/previewlist?page=' + PAGING.page), function (ret) {
                 if (ret) {
                     ret.forEach(function (value) {
                         insertArticleItem(value);
                     });
                     PAGING.page += 1;
-                    if (ret.length < PAGING.COUNT) {
-                        PAGING.hasMore = false;
-                        $('.load-more').text('NO MORE ARTICLE');
+                    if (ret.length === PAGING.COUNT) {
+                        PAGING.hasMore = true;
+                    } else if (ret.length < PAGING.COUNT) {
+                        $('.load-more').hide();
                     }
-                } else {
-                    PAGING.hasMore = false;
-                    $('.load-more').text('NO MORE ARTICLE');
+                }
+            });
+        }
+
+        function getArticleCatalogs() {
+            $.ajax({
+                url: urlApi('/article/catalogs'),
+                async: false,
+                success: function (ret) {
+                    ArticleCatalogs = ret;
                 }
             });
         }
 
         $(document).ready(function () {
-            loadArticlePreview();
+            getArticleCatalogs();
 
-            $('.load-more').click(function () {
-                loadArticlePreview();
-            })
+            loadArticlePreview();
         });
     </script>
 </head>
@@ -187,7 +200,7 @@
     <div class="article-container">
     </div>
     <div class="paging">
-        <button class="load-more">LOAD MORE</button>
+        <button class="load-more" onclick="loadArticlePreview()">LOAD MORE</button>
     </div>
 </div>
 <div class="copyright">

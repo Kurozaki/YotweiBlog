@@ -14,11 +14,6 @@
     </rule>
 
     <rule>
-        <from>^/blog$</from>
-        <to>/views/blog.html</to>
-    </rule>
-
-    <rule>
         <from>^/moment$</from>
         <to>/views/moment.html</to>
     </rule>

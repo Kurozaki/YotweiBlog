@@ -156,97 +156,95 @@
                 </span>
             </div>
             <div class="article-content">
-                <h2>
-                    题目描述
-                </h2>
                 <p>
-                    最近看到一道比较有趣的算法题，原题是这样的： 写一个函数，求两个整数（int）之和，要求在函数体内不得使用+、-、*、/四则运算符号。
-                </p>
-                <h2>
-                    我的解法
-                </h2>
-                <pre><code>public int add(int num1, int num2) {
-    return (num1 & num2) == 0 ? num1 ^ num2 : add(num1 ^ num2, (num1 & num2) << 1);
-}</code></pre>
-                <p>
-                    只有一行，很简洁对吧，下面我来慢慢说明思路。
-                </p>
-                <h2>
-                    解题思路
-                </h2>
-                <p>
-                    这是考察对计算机加法的理解，既然常规的四则运算不能使用，那就要从位运算的角度出发来考虑问题了。
+                    Java的java.util.concurrent.*包下有许多在并发场景下使用的集合，ArrayBlockingQueue是其中之一，它是一个循环队列，这个队列的特别之处在于take方法与put方法，分别对应队列的元素出列和元素入列操作，当队列为空时，take会使得线程进入等待状态，直到队列不为空，有元素能够出列才会继续执行；同理，当队列满时，put方法也会使得线程进入等待状态。
                 </p>
                 <p>
-                    基于二进制加法，现在考虑两种情况
+                    实际上这是一个生产者-消费者模型，按照理解， 自己也试着实现了一个，代码如下
                 </p>
-                <h3>
-                    1、相加不产生进位
-                </h3>
-                <p>
-                    当两个二进制相加不产生进位时，A+B与A^B是完全等价的（^表示异或） 举个栗子，9+2
-                </p>
-                <p>
-                    对于加法运算
-                </p>
-                <pre><code>1 0 0 1
-0 0 1 0 +
-————
-1 0 1 1</code></pre>
-                <p>
-                    对于异或运算
-                </p>
-                <pre><code>1 0 0 1
-0 0 1 0 ^
-————
-1 0 1 1</code></pre>
-                <p>
-                    因为不产生进位，因此加法的每一位不会对下一位产生影响，而异或正好也是按位运算，二者是等价的。
-                </p>
+                <pre>
+                    <code>/**
+ * Created by YotWei on 2018/7/1.
+ */
+public class BlockingQueue&lt;E&gt; {
 
-                <h3>
-                    2、相加产生进位
-                </h3>
-                <p>
-                    这种情况就是在按位异或的基础上与进位相加。进位的条件是两个1相加，因此通过按位与运算（&）就可以找到进位的位置，由于是向高一位进位，所以两数相与后还需要左移一位，最后将相与移位，按位异或的结果相加，这又回到了两数相加的问题，重复递归到两数相加无进位终止即可。
-                </p>
-                <h3>
-                    整合的代码如下
-                </h3>
-                <pre><code>    public int add(int num1, int num2) {
-        if ((num1 & num2) == 0) {
-            //相与为0，不产生进位
-            return num1 ^ num2;
-        } else {
-            //相与不为0，产生进位
-            return add(num1 ^ num2, (num1 & num2) << 1);
+    /**
+     * 有界队列内部固定长度，因此可以用数组实现
+     */
+    private Object[] elements;
+
+    /**
+     * 队列的头和尾下标
+     */
+    private int head = 0, tail = 0;
+
+    /**
+     * 队列目前的长度
+     */
+    private int size;
+
+    private ReentrantLock lock = new ReentrantLock();
+
+    private Condition notEmpty = lock.newCondition();
+
+    private Condition notFull = lock.newCondition();
+
+    public BlockingQueue(int capacity) {
+        this.elements = new Object[capacity];
+    }
+
+    public void put(E e) {
+        lock.lock();
+        try {
+            while (size == elements.length)
+                notFull.await();
+            elements[tail] = e;
+            if (++tail == elements.length) {
+                tail = 0;
+            }
+            size++;
+            notEmpty.signal();
+
+        } catch (InterruptedException ex) {
+            ex.printStackTrace();
+        } finally {
+            lock.unlock();
         }
-    }</code></pre>
-                <p>
-                    这种场合下if…else…写法有点low，简化成三目运算符 a? b: c
-                </p>
-                <pre><code>public int add(int num1, int num2) {
-    return (num1 & num2) == 0 ? num1 ^ num2 : add(num1 ^ num2, (num1 & num2) << 1);
-}</code></pre>
-                <p>
-                    如果觉得递归会给你的效率带来影响，也可以写成循环的形式
-                </p>
-                <pre><code>class Test {
-    public int add(int num1, int num2) {
-        int temp;
-        while (num2 != 0) {
-            temp = num1 ^ num2;
-            num2 = (num1 & num2) << 1;
-            num1 = temp;
+    }
+
+    public E take() {
+        lock.lock();
+        E e = null;
+        try {
+            while (size == 0) {
+                notEmpty.await();
+            }
+            e = (E) elements[head];
+            elements[head] = null;
+            if (++head == elements.length)
+                head = 0;
+            size--;
+            notFull.signal();
+
+        } catch (InterruptedException ex) {
+            ex.printStackTrace();
+        } finally {
+            lock.unlock();
         }
-        return num1;
+        return e;
+    }
+
+    public int size() {
+        lock.lock();
+        try {
+            return size;
+        } finally {
+            lock.unlock();
+        }
     }
 }</code></pre>
-                <h3>
-                    最后可能有人会问跟<strong>负数相加会怎样</strong>？
-                </h3>
                 <p>
-                    在计算机运算中，<label style="color: darkred">由于补码的存在，使得减法既是加法</label>，加减法的计算过程是完全相同的，就算用负数来测试也能得到正确的结果
+                    实际上ArrayBlockingQueue还包含许多其它方法，这两个是最核心的。
                 </p>
             </div>
         </div>
