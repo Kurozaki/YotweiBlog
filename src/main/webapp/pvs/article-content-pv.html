@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Yotwei的博客</title>
+    <link rel="icon" href="../static/images/wicon.png">
+
+    <link rel="stylesheet" href="../static/css/framecss.css">
+    <link rel="stylesheet" href="../static/css/font-awesome.css">
+    <link rel="stylesheet" href="../static/css/animate.css">
+    <link rel="stylesheet" href="../static/css/highlight/default.css">
+    </li>
+
+    <style>
+        body {
+            text-align: center;
+            background-color: #F0F0F0;
+            margin: 0;
+        }
+
+        #main-area {
+            padding: 3em;
+            min-height: 720px;
+        }
+
+        .article-title {
+            transition-property: color;
+            transition-duration: 500ms;
+            font-size: x-large;
+        }
+
+        .article-info {
+            color: GrayText;
+            font-size: small;
+            padding: 1.4em;
+            vertical-align: middle;
+        }
+
+        .article-info > span {
+            display: inline-block;
+            font-size: small;
+            margin-right: 0.4em;
+        }
+
+        .article-info > span + span:before {
+            margin-right: 0.4em;
+            content: '|';
+        }
+
+        .article-info > span > span {
+            padding: 0.2em;
+        }
+
+        .article-content {
+            border-top: 1px dashed #dddddd;
+            color: #666666;
+            margin-top: 2em;
+            padding-top: 2em;
+            font-size: small;
+            text-align: left;
+        }
+
+
+    </style>
+
+    <script src="../static/js/jquery-3.2.1.min.js"></script>
+    <script src="../static/js/public.js"></script>
+    <script src="../static/js/highlight.pack.js"></script>
+
+    <script>
+
+        function initialAnimated() {
+            $('.init-hidden').slideDown();
+        }
+
+        function initCalendar() {
+            var monthEng = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            var date = new Date();
+
+            $('.c-year-month').text(monthEng[date.getMonth()] + ', ' + date.getFullYear());
+            $('.c-day').text(Format.zereoill(date.getDate(), 2));
+        }
+
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            // mobile client check
+            if (isMobile()) {
+                window.location.href = '/mhome';
+                return;
+            }
+
+            // display initial animations
+            initialAnimated();
+
+            // initial calendar
+            initCalendar();
+
+            // load article detail
+            $('pre code').each(function (index, e) {
+                hljs.highlightBlock(e);
+            });
+        });
+    </script>
+</head>
+<body>
+<div class="header">
+    <div class="slider">
+        <div class="basic-frame">
+            <div class="info">
+                <img class="avatar" src="../static/images/avatar.png">
+                <span class="nickname">Yotwei</span>
+                <div class="motto">
+                    <span class="fa fa-quote-left"></span>
+                    如果结果不如你所愿，就在尘埃落定前奋力一搏。
+                    <span class="fa fa-quote-right"></span>
+                </div>
+            </div>
+            <div class="nav init-hidden">
+                <div class="nav-item" onclick="window.location.href='/home'">
+                    <span class="fa fa-fw fa-home"></span>
+                    <span>HOME</span>
+                </div>
+                <div class="nav-item" onclick="window.location.href='/moment'">
+                    <span class="fa fa-fw fa-photo"></span>
+                    <span>MOMENT</span>
+                </div>
+                <div class="nav-item" onclick="window.location.href='/about'">
+                    <span class="fa fa-fw fa-question-circle-o"></span>
+                    <span>ABOUT</span>
+                </div>
+            </div>
+        </div>
+        <div class="invisible"></div>
+        <div class="basic-frame">
+            <div class="title-today">
+                <span class="fa fa-calendar"></span>
+                <span>TODAY</span>
+            </div>
+            <div class="calendar">
+                <div class="c-day">
+                </div>
+                <div class="c-year-month">
+                </div>
+                <div class="c-week">Sunday</div>
+            </div>
+        </div>
+    </div>
+    <div class="content">
+        <div id="main-area" class="basic-frame">
+            <div class="article-title">
+            </div>
+            <div class="article-info">
+                <span>
+                    <span class="fa fa-calendar-o"></span>
+                    <span id="create-time"></span>
+                </span>
+                <span>
+                    <span class="fa fa-eye"></span>
+                    <span id="read-count"></span>
+                </span>
+            </div>
+            <div class="article-content">
+                <p>
+                    很早之前看到一关于js的问题，如下
+                </p>
+                <pre><code>&gt;&gt; 0.1+0.2
+&lt; 0.300000000000004</code></pre>
+                <p>
+                    实际上 0.1+0.2 != 0.3 这个问题不是js特有，来看一段java代码
+                </p>
+                <pre>
+                    <code>@Test
+public strictfp void test() {
+    System.out.println(0.1f + 0.2f == 0.3f);
+    System.out.println(0.1 + 0.2 == 0.3);
+}</code></pre>
+                <p>
+                    程序的运行结果是
+                </p>
+                <pre><code>true
+false</code></pre>
+                <p>
+                    这个问题应该是基础中的基础，众所周知，这是一个不可避免的浮点数精度丢失问题，同十进制一样，二进制中也会存在无限循环小数，而计算机对浮点数的表示通常是用 32 或 64
+                    位的二进制，这使得在二进制的表达上必须采用“截断”的手段丢掉一些二进制位
+                </p>
+                <p>
+                    下面我来分析为什么上面的运行结果是这样，由于Java不能直接查看浮点数的十六进制表达，所以用c语言来分析
+                </p>
+                <h2>
+                    1、IEEE754 标准
+                </h2>
+                <p>
+                    IEEE754是最广泛运用的浮点数表达的格式。Java里面有一个不怎么常见的strictfp关键字，用于修饰方法，被修饰的方法中的浮点运算都会严格遵守IEEE754规范。关于IEE754的细节，可以翻阅相关资料，这里就讨论主要的。
+                </p>
+                <h2>
+                    2、IEEE754 标准下浮点数的存储格式
+                </h2>
+                <p>
+                    浮点数的存储分为三个部分，s, e, f，对应符号(sign)，指数(exp)，有效数位(fraction)
+                </p>
+                <p>
+                    对于float，s+e+f = 1+8+23
+                </p>
+                <p>
+                    对于double，s+e+f=1+11+52
+                </p>
+                <h3>
+                    来看下面一段代码
+                </h3>
+                <p>
+                    准备两个函数，用于显示浮点数的二进制表达
+                </p>
+                <pre>
+                    <code>void float_hex(float* f) {
+    int *p = (int *)f;
+    printf("%f -> %08x\n", *f, *p);
+}
+
+void double_hex(double* d){
+    int *p = (int *)d;
+    printf("%lf -> %08x %08x\n", *d, *p, *(p+1));
+}</code></pre>
+                <p>
+                    main函数的调用
+                </p>
+                <pre><code>int main() {
+    float f = 0.1f;
+    float_hex(&f);
+
+    double d = 0.1;
+    double_hex(&d);
+    return 0;
+}</code></pre>
+                <h3>
+                    运行结果
+                </h3>
+                <pre><code>0.1 -> 3dcccccd
+0.1 -> 9999999a 3fb99999</code></pre>
+                <p>下面来分析一下为什么是这样子</p>
+                <h3>
+                    1）规范化表达
+                </h3>
+                <p>
+                    下面来验证一下，对于0.1，转化成二进制表达
+                </p>
+                <pre><code>0.000011001100110011....</code></pre>
+                <p>
+                    规范化表达（类似于十进制的科学记数法）
+                </p>
+                <pre><code>1.100110011001100 x 2^-4</code></pre>
+                <p>
+                    其中符号位0。
+                </p>
+                <h3>
+                    2）指数的表达
+                </h3>
+                <p>
+                    接下来的指数部分应该是-4，可是实际上存储的是是0111 1011，实际上这是<label style="color: darkred;">移码的表达
+                </label>，移的是127，也就是指数部分存储的最终内容是127+(-4)=123，也就是0111 1011
+                </p>
+                <h3>
+                    3）有效部分截断时的四舍五入
+                </h3>
+                <p>
+                    有效数位部分按道理来讲是 1100 1100 1100 的循环直至截断，由于规范化表达，使得小数点左边的一位一定是1，所以这一位被省略了，剩下的就是1001 1001
+                    1001的循环，由于有效只能表达23位，所以应该是（灰色表达要被丢弃的部分）
+                </p>
+                <pre><code>100 1100 1100 1100 1100 1100 <label
+                        style="color: lightgray">1100 1100...</label></code></pre>
+
+                <p>
+                    细心的人会注意到<strong>最后四位并不是1100，而是1101</strong>，这是因为截断尾数时采用了四舍五入的方式，如果截断的部分第一位为1，说明截断部分的数值大于或等于上一位的1/2，因此向前进一位所表达的误差会更小，因此被截断的
+                    1100 1100 1100.. 会对上一位产生进位影响，所以最后四位是1100 + 1 = 1101
+                </p>
+                <p>
+                    对于double型也是一样的方式，值得注意的是代码中显示的是 9999 9999a 3fb9 9999， 但实际上这个double的表达是 3fb9 9999 9999
+                    9999a，代码打印的结果是因为这里采用<strong>大端存储</strong>的缘故
+                </p>
+
+                <h2>
+                    3、浮点数加法
+                </h2>
+                <p>
+                    指数不同的两个浮点数是不能直接相加的，拿0.1+0.2举例
+                </p>
+                <p>
+                    0.2的有效数位表达和0.1是相同的，但是指数部分比0.1的指数多1，因为恰好0.1x2=0.2，也可以写代码验证一下。
+                </p>
+                <p>
+                    0.1的指数部分是-4，0.2指数部分是-3，小阶要向大阶“看齐”，0.1若要表示成指数为-3，就需要将有效数位整体右移，这样一来就能对有效数位相加
+                </p>
+
+                <pre><code> 1.100 1100 1100 1100 1100 1101 <label style="color: orange">0</label>
+ 0.110 0110 0110 0110 0110 0110 <label style="color: orange">1</label>
+______________________________________
+10.011 0011 0011 0011 0011 0011 <label style="color: orange">1</label></code></pre>
+                <p>
+                    橙色部分不会因为右移而丢失，因为在计算浮点数的时候会运用两个比float位数多的临时变量来计算，double也是
+                </p>
+                <p>
+                    规范化，四舍五入后尾数为
+                </p>
+                <pre><code>001 1001 1001 1001 1010</code></pre>
+                <p>
+                    指数为-2，表达出来是 0111 1101，0.1+0.2的结果应该表达为
+                </p>
+                <pre><code>0011 1110 1001 1001 1001 1001 1001 1010（3E99 999A）</code></pre>
+                <h2>
+                    4、为什么 0.1f+0.2f == 0.3f 成立
+                </h2>
+                <p>
+                    上面分析的是0.1+0.2都是浮点数表达，即0.1f+0.2f，结果是3E99 999A，直接用浮点数表达0.3f，也会得到结果3E99
+                    999A，所以Java代码中第一个双等号的结果是true。因此，这个
+                    true 的产生是二者截断后恰好都有进位的原因，并不是精确意义上的相等。
+                </p>
+                <h2>
+                    5、为什么0.1+0.2 == 0.3 不成立
+                </h2>
+                <p>
+                    用同样的方式分析double，给double型变量直接赋值 0.3 和赋值 0.1+0.2 会得到不一样的结果，具体原因是 0.1 + 0.2的时候尾数截断产生了进位，而直接表达 0.3
+                    的时候没有，详细流程可以自己分析一下，这里不赘述。 因此Java代码中第二个双等号的结果是false
+                </p>
+
+                <h2>
+                    6、判断浮点数的运算结果
+                </h2>
+                <p>
+                    如果要想判断0.1+0.2==0.3，应该写成形如 Math.abs(0.1+0.2 - 0.3) < 1e-6 的形式。
+                </p>
+            </div>
+        </div>
+        <div class="copyright">
+            <span>YotweiWong</span>
+            <span class="fa fa-copyright"></span>
+            <span>2018</span>
+        </div>
+        <div>
+
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

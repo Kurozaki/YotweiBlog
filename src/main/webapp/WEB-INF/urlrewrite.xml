@@ -30,11 +30,11 @@
 
     <rule>
         <from>^/mhome$</from>
-        <to>/mobileviews/home.html</to>
+        <to>/viewsmobile/home.html</to>
     </rule>
 
     <rule>
         <from>^/marticle/\d+$</from>
-        <to>/mobileviews/article.html</to>
+        <to>/viewsmobile/article.html</to>
     </rule>
 </urlrewrite>

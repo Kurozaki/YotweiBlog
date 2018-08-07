@@ -52,6 +52,7 @@ public class ArticleService {
     }
 
     public Map<String, Object> getArticleDetail(int articleId) {
+        // query data
         Map<String, Object> map = new HashMap<>();
         map.put("preview", articleDao.queryArticlePreviewById(articleId));
         map.put("content", articleDao.queryArticleContentById(articleId));
@@ -70,4 +71,7 @@ public class ArticleService {
         return articleDao.queryArticleCatalogs();
     }
 
+    public void incReadCount(int articleId) {
+        articleDao.incArticleReadCount(articleId, 1);
+    }
 }

@@ -28,10 +28,10 @@
         .load-more {
             transition-property: background-color;
             transition-duration: 100ms;
-            border-radius: 3px;
+            border-radius: 4px;
             cursor: default;
             font-size: small;
-            border: 1px dotted #aaaaaa;
+            border: 1px solid #aaaaaa;
             color: #aaaaaa;
             padding: 0.2em 4em;
         }
@@ -118,7 +118,7 @@
             initCalendar();
 
             // load time line' node
-            loadTimelineNodes(0);
+            loadTimelineNodes();
         });
     </script>
 </head>
@@ -171,8 +171,9 @@
         <div id="main-area" class="basic-frame">
             <div class="time-line">
             </div>
-
-            <div><span class="load-more" onclick="loadTimelineNodes()">MORE</span></div>
+            <div>
+                <span class="load-more" onclick="loadTimelineNodes()">MORE</span>
+            </div>
         </div>
 
         <div class="copyright">

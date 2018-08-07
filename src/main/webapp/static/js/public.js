@@ -9,7 +9,8 @@ Format.zereoill = function (num, c) {
 };
 
 function urlApi(uri) {
-    return "http://localhost:8080" + uri;
+    // return "http://localhost:8080" + uri;
+    return uri;
 }
 
 function isMobile() {

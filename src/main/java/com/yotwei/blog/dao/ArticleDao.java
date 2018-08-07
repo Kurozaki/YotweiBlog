@@ -24,4 +24,6 @@ public interface ArticleDao {
     void insertArticleContent(ArticleContent content);
 
     int queryTotalCount();
+
+    void incArticleReadCount(@Param("articleId") int articleId, @Param("inc") int inc);
 }

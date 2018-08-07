@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="dataSourceStorageLocal">
+    <data-source name="dataSource" uuid="4a7b10f6-a545-4a36-b042-dd002907f206">
+      <database-info product="" version="" jdbc-version="" driver-name="" driver-version="" />
+    </data-source>
+    <data-source name="jdbc" uuid="5b6f5ebf-f4b5-4f5f-93f1-67938d141988">
+      <database-info product="" version="" jdbc-version="" driver-name="" driver-version="" />
+      <introspection-schemas>*:weiblog</introspection-schemas>
+    </data-source>
+  </component>
+</project>

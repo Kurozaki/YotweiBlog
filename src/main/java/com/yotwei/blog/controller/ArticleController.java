@@ -1,6 +1,5 @@
 package com.yotwei.blog.controller;
 
-import com.yotwei.blog.enity.ArticleCatalog;
 import com.yotwei.blog.enity.ArticleContent;
 import com.yotwei.blog.enity.ArticlePreview;
 import com.yotwei.blog.enity.ResponseBean;
@@ -9,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
 
@@ -41,7 +41,18 @@ public class ArticleController {
 
     @RequestMapping("/detail")
     public Map<String, Object> getArticleContent(
+            @Autowired HttpServletRequest request,
             @RequestParam("articleId") int articleId) {
+
+        if (request.getSession().getAttribute("read") == null) {
+            // add read flag
+            request.getSession().setAttribute("read", new Object());
+            request.getSession().setMaxInactiveInterval(3600);
+
+            // add read count
+            articleService.incReadCount(articleId);
+        }
+
         return articleService.getArticleDetail(articleId);
     }
 

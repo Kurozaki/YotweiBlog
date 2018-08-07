@@ -43,4 +43,10 @@
         INSERT INTO wb_article_content(article_id, content)
         VALUES (#{articleId}, #{content});
     </insert>
+
+    <update id="incArticleReadCount">
+        UPDATE wb_article_preview
+        SET read_count = read_count + #{inc}
+        WHERE id = #{articleId};
+    </update>
 </mapper>

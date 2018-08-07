@@ -34,6 +34,9 @@ public class TimelineController {
         return timelineService.getTimelineNodes(offset);
     }
 
+    /*
+     * for admin
+     */
     @RequestMapping("/addnode")
     public ResponseBean addTimelineNode(@RequestParam("content") String content,
                                         @RequestParam("assocUrl") String url) {
